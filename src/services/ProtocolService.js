@@ -38,12 +38,14 @@ export default class ProtocolService {
      * @param {int} startTime
      * @param {int} duration
      * @param {string|null} comment
+     * @param {int} breakTime
      */
-    createEntry(startTime, duration, comment = null) {
+    createEntry(startTime, duration, comment = null, breakTime = 0) {
         let entry = {
             start: startTime,
             duration: duration,
-            comment: comment
+            comment: comment,
+            breakTime: breakTime
         };
         this.protocolStorage.add(entry);
         this.isEntryCacheUpToDate = false;
@@ -75,10 +77,15 @@ export default class ProtocolService {
                     start: datasets[key].start,
                     duration: datasets[key].duration,
                     comment: datasets[key].comment,
+                    breakTime: datasets[key].breakTime,
                     key: key // required for flatList component
                 });
             }
         }
+
+        entries.sort((a,b) => {
+            return a.start > b.start ? -1 : 1;
+        });
 
         this.entryCache = entries;
         this.isEntryCacheUpToDate = true;

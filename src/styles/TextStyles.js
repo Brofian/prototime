@@ -31,6 +31,9 @@ export const TextStyles = StyleSheet.create({
     bold: {
         fontWeight: "600"
     },
+    centered: {
+      textAlign: 'center'
+    },
     hasError: {
         color: Colors.red,
         fontWeight: "600"

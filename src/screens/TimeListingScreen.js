@@ -32,12 +32,17 @@ export default class TimeListingScreen extends Screen {
     renderItem(item, index, separators) {
         let duration = new Date(item.item.duration);
         let start = new Date(item.item.start);
-        let end = new Date(item.item.start + item.item.duration);
+        let breakTime = item.item.breakTime;
+        let end = new Date(item.item.start + item.item.duration + ((breakTime??0)*1000*60));
+        let comment = item.item.comment;
+
 
         return (
             <View>
                 <Text style={TextStyles.header.major}>{DateTimeWidget.toTime(duration, true)}h</Text>
                 <Text>{DateTimeWidget.toFullDateTime(start)} bis {DateTimeWidget.toFullDateTime(end)}</Text>
+                {!breakTime ? '' : <Text>Zzgl. {breakTime} Minuten Pause</Text>}
+                {!comment       ? '' : <Text>{comment}</Text>}
                 <View style={TextStyles.spacer.m} />
             </View>
         );
@@ -49,13 +54,12 @@ export default class TimeListingScreen extends Screen {
                 <StatusBar style="auto"/>
 
                 <Pressable
-                    onPress={() => ProtocolService.getInstance()._clear()}
+                    //onPress={() => ProtocolService.getInstance()._clear()}
                 >
                     <Text>Clear all</Text>
                 </Pressable>
 
                 <FlatList
-                    inverted
                     data={this.state.elements}
                     renderItem={this.renderItem}
                     style={{

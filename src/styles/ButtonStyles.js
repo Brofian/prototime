@@ -21,4 +21,10 @@ export const ButtonStyles = StyleSheet.create({
             resizeMode:'contain'
         }
     },
+    primary: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: Colors.primary,
+        borderRadius: 30
+    }
 });

@@ -15,9 +15,27 @@ export default class App extends Component {
     return (
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="TimeListing" component={TimeListingScreen} />
-            <Stack.Screen name="AddTime" component={AddTimeScreen} />
+            <Stack.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{
+                  title: ""
+                }}
+            />
+            <Stack.Screen
+                name="TimeListing"
+                component={TimeListingScreen}
+                options={{
+                  title: "Protokoll"
+                }}
+            />
+            <Stack.Screen
+                name="AddTime"
+                component={AddTimeScreen}
+                options={{
+                  title: "Erstellen"
+                }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
     );

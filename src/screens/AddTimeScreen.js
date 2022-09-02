@@ -7,6 +7,8 @@ import {WidgetStyles} from "../styles/WidgetStyles";
 import {TextStyles} from "../styles/TextStyles";
 import {TableLayoutStyles} from "../styles/TableLayoutStyles";
 import ProtocolService from "../services/ProtocolService";
+import NumericInput from "react-native-numeric-input";
+import {Colors} from "../styles/Variables";
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -18,12 +20,20 @@ export default class AddTimeScreen extends Screen {
     state = {
         start: (new Date()).getTime(),
         end: (new Date()).getTime(),
+        break: 0,
         comment: '',
         error: ''
     }
 
+    constructor(props) {
+        super(props);
+        this.defaultBreak = 0;
+        this.state.break = this.defaultBreak;
+    }
+
+
     onSave() {
-        let duration = this.state.end - this.state.start;
+        let duration = this.state.end - this.state.start - (this.state.break*1000*60);
 
         if(duration < (1000*60*5)) {
             this.setState({
@@ -36,7 +46,8 @@ export default class AddTimeScreen extends Screen {
             ProtocolService.getInstance().createEntry(
                 this.state.start,
                 duration,
-                this.comment
+                this.state.comment,
+                this.state.break
             );
 
             this.setState({
@@ -94,6 +105,29 @@ export default class AddTimeScreen extends Screen {
                         />
                     </View>
                 </View>
+
+
+                <View style={TextStyles.spacer.m}></View>
+
+                <View style={TableLayoutStyles.row}>
+                    <View style={{ flex: 1 }}>
+                        <Text>Pause (min): </Text>
+                    </View>
+
+                    <View style={{ flex: 2, alignItems: 'flex-start' }}>
+                        <NumericInput
+                            onChange={value => this.setState({break: parseInt(value??'0')})}
+                            leftButtonBackgroundColor={Colors.primaryLight}
+                            rightButtonBackgroundColor={Colors.primaryLight}
+                            rounded={false}
+                            containerStyle={{borderRadius: 5, overflow: 'hidden', height: 40}}
+                            borderColor={Colors.transparent}
+                            minValue={0}
+                            maxValue={600}
+                        />
+                    </View>
+                </View>
+
 
                 <View style={TextStyles.spacer.xl}></View>
 

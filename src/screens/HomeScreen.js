@@ -4,6 +4,7 @@ import Screen from "../abstract/Screen";
 import {ScreenStyles} from "../styles/ScreenStyles";
 import ActionButton from "../components/ActionButton";
 import {Colors} from "../styles/Variables";
+import MonthlyWorkloadWidget from "../components/MonthlyWorkloadWidget";
 
 export default class HomeScreen extends Screen {
 
@@ -12,8 +13,9 @@ export default class HomeScreen extends Screen {
     render() {
         return (
             <View style={ScreenStyles.container}>
-                <Text>Open up App.js to start working on your app!</Text>
                 <StatusBar style="auto"/>
+
+                <MonthlyWorkloadWidget />
 
                 <ActionButton
                     src={require('../assets/icons/list.png')}
