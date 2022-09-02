@@ -2,6 +2,11 @@
   "expo": {
     "name": "Prototime",
     "slug": "prototime",
-    "orientation": "portrait"
+    "description": "A tool for documenting time and keeping an eye on your workload",
+    "orientation": "portrait",
+    "android": {
+      "package": "de.fabianholzwarth.prototime"
+    },
+    "userInterfaceStyle": "light"
   }
 }

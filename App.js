@@ -5,6 +5,7 @@ import HomeScreen from "./src/screens/HomeScreen";
 import {NavigationContainer} from "@react-navigation/native";
 import TimeListingScreen from "./src/screens/TimeListingScreen";
 import AddTimeScreen from "./src/screens/AddTimeScreen";
+import ConfigScreen from "./src/screens/ConfigScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,13 @@ export default class App extends Component {
                 component={AddTimeScreen}
                 options={{
                   title: "Erstellen"
+                }}
+            />
+            <Stack.Screen
+                name="Config"
+                component={ConfigScreen}
+                options={{
+                  title: "Einstellungen"
                 }}
             />
           </Stack.Navigator>

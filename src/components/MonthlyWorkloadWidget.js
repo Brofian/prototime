@@ -21,6 +21,7 @@ export default class MonthlyWorkloadWidget extends Component {
         this.montlyExpenseHours = 27; // 27 hours in milliseconds
         this.measurementBeginning = new Date('2022-09-01');
         this.monthsSinceBegin = this.monthDiff(this.measurementBeginning, new Date())+1;
+        this.navigation = props.navigation;
 
         ProtocolService.getInstance().getEmitter().addListener('initialized', this.onProtocolInitialized, this);
     }
@@ -112,12 +113,20 @@ export default class MonthlyWorkloadWidget extends Component {
                     </View>
                 </View>
 
-                <View style={{flex: 8, alignSelf: 'stretch', alignItems: 'center' }}>
+                <View style={{flex: 1, alignSelf: 'stretch', alignItems: 'center' }}>
                     <Pressable
                         onPress={this.onProtocolInitialized.bind(this)}
                         style={ButtonStyles.primary}
                     >
                         <Text>Aktualisieren</Text>
+                    </Pressable>
+                </View>
+                <View style={{flex: 7, alignSelf: 'stretch', alignItems: 'center' }}>
+                    <Pressable
+                        onPress={() => this.navigation.navigate('Config')}
+                        style={ButtonStyles.secondary}
+                    >
+                        <Text>Konfiguration</Text>
                     </Pressable>
                 </View>
 

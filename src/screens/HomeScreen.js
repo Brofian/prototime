@@ -15,7 +15,9 @@ export default class HomeScreen extends Screen {
             <View style={ScreenStyles.container}>
                 <StatusBar style="auto"/>
 
-                <MonthlyWorkloadWidget />
+                <MonthlyWorkloadWidget
+                    navigation={this.navigation}
+                />
 
                 <ActionButton
                     src={require('../assets/icons/list.png')}

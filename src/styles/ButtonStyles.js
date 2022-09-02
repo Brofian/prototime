@@ -26,5 +26,11 @@ export const ButtonStyles = StyleSheet.create({
         paddingHorizontal: 20,
         backgroundColor: Colors.primary,
         borderRadius: 30
+    },
+    secondary: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: Colors.gray800,
+        borderRadius: 30
     }
 });
