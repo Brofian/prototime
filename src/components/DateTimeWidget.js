@@ -10,45 +10,49 @@ const weekdays = ['So','Mo','Di','Mi','Do','Fr','Sa'];
 export default class DateTimeWidget extends Component {
 
     state = {
-        value: new Date(),
-        minDate: null
+        value: 0
     }
 
     constructor(props) {
         super(props);
         this.onChange = props.onChange;
-        this.state.minDate = props.minDate;
+        this.getMinDateFunc = props.minDateFunc;
         this.state.value = props.value;
     }
 
     showDateTimePicker(mode) {
+        let minimumDate = this.getMinDateFunc ? this.getMinDateFunc() : 0;
         DateTimePickerAndroid.open({
-            value: this.state.value,
-            onChange: this.onDateTimePickerChanged.bind(this,  mode),
+            value: new Date(this.state.value),
+            onChange: this.onDateTimePickerChanged.bind(this, mode),
             mode: mode,
-            minimumDate: this.state.minDate,
+            minimumDate: new Date(minimumDate),
             is24Hour: true,
         });
+    }
+
+    onAfterStateChanged() {
+        this.onChange(this.state.value);
     }
 
     onDateTimePickerChanged(mode, event) {
         if(event.type === 'set') {
             let configuration = new Date(event.nativeEvent.timestamp);
+            let current = new Date(this.state.value);
 
             if(mode === 'date') {
-                this.state.value.setDate(configuration.getDate());
-                this.state.value.setMonth(configuration.getMonth());
-                this.state.value.setFullYear(configuration.getFullYear());
-                this.setState(this.state);
+                current.setDate(configuration.getDate());
+                current.setMonth(configuration.getMonth());
+                current.setFullYear(configuration.getFullYear());
             }
-
             else if(mode === 'time') {
-                this.state.value.setMinutes(configuration.getMinutes());
-                this.state.value.setHours(configuration.getHours());
-                this.setState(this.state);
+                current.setMinutes(configuration.getMinutes());
+                current.setHours(configuration.getHours());
             }
 
-            this.onChange(this.state.value);
+            this.setState({
+                value: current.getTime()
+            }, this.onAfterStateChanged.bind(this));
         }
     }
 
@@ -56,7 +60,7 @@ export default class DateTimeWidget extends Component {
      * @param {int} num
      * @return {int}
      */
-    toTwoDigit(num) {
+    static toTwoDigit(num) {
         return (num > 9) ? num : '0'+num;
     }
 
@@ -64,10 +68,10 @@ export default class DateTimeWidget extends Component {
      * @param {Date} datetime
      * @returns {string}
      */
-    toCalendarDate(datetime) {
+    static toCalendarDate(datetime) {
         let weekday = weekdays[datetime.getDay()];
-        let date = this.toTwoDigit(datetime.getDate());
-        let month = this.toTwoDigit(datetime.getMonth()+1);
+        let date = DateTimeWidget.toTwoDigit(datetime.getDate());
+        let month = DateTimeWidget.toTwoDigit(datetime.getMonth()+1);
         let year = datetime.getFullYear();
         return `${weekday} ${date}.${month}.${year}`;
         //return datetime.toLocaleDateString('de-DE', dateOptions);
@@ -75,13 +79,21 @@ export default class DateTimeWidget extends Component {
 
     /**
      * @param {Date} datetime
+     * @param {Boolean} asUtc
      * @returns {string}
      */
-    toTime(datetime) {
-        let hour = this.toTwoDigit(datetime.getHours());
-        let minute = this.toTwoDigit(datetime.getMinutes());
-        return `${hour}:${minute} Uhr`;
+    static toTime(datetime, asUtc = false) {
+        let hour = DateTimeWidget.toTwoDigit(asUtc ? datetime.getUTCHours() : datetime.getHours());
+        let minute = DateTimeWidget.toTwoDigit(asUtc ? datetime.getUTCMinutes() : datetime.getMinutes());
+        return `${hour}:${minute}`;
         //return datetime.toLocaleTimeString('de-DE', dateOptions);
+    }
+
+    /**
+     * @param datetime
+     */
+    static toFullDateTime(datetime) {
+       return `${DateTimeWidget.toCalendarDate(datetime)} ${DateTimeWidget.toTime(datetime)} Uhr`;
     }
 
     render() {
@@ -93,7 +105,7 @@ export default class DateTimeWidget extends Component {
                     style={WidgetStyles.dateTime.left}
                     activeOpacity={0.8}
                 >
-                    <Text>{this.toCalendarDate(this.state.value)}</Text>
+                    <Text>{DateTimeWidget.toCalendarDate(new Date(this.state.value))}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -101,7 +113,7 @@ export default class DateTimeWidget extends Component {
                     style={WidgetStyles.dateTime.right}
                     activeOpacity={0.8}
                 >
-                    <Text>{this.toTime(this.state.value)}</Text>
+                    <Text>{DateTimeWidget.toTime(new Date(this.state.value))} Uhr</Text>
                 </TouchableOpacity>
             </View>
         );

@@ -1,9 +1,8 @@
 import {Component} from "react";
 import {Image, TouchableHighlight, View} from "react-native";
-import {Colors} from "../styles/Variables";
 import {ButtonStyles} from "../styles/ButtonStyles";
 
-export default class ActionButton extends Component {
+export default class  ActionButton extends Component {
 
     constructor(props) {
         super(props);
@@ -19,12 +18,12 @@ export default class ActionButton extends Component {
         return (
             <View style={ButtonStyles.action.main}>
                 <TouchableHighlight
-                    onPress={this.onPress()}
+                    onPress={() => this.onPress()}
                     activeOpacity={1}
                     underlayColor={this.background}
                     style={{
                         backgroundColor: this.color,
-                        padding: 15
+                        padding: 20
                     }}
                 >
                     <View style={[{

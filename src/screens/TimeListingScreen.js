@@ -1,25 +1,78 @@
 import { StatusBar } from 'expo-status-bar';
 import Screen from "../abstract/Screen";
 import {ScreenStyles} from "../styles/ScreenStyles";
-import {Text, View} from "react-native";
+import {FlatList, Pressable, Text, View} from "react-native";
 import ActionButton from "../components/ActionButton";
 import {Colors} from "../styles/Variables";
+import ProtocolService from "../services/ProtocolService";
+import DateTimeWidget from "../components/DateTimeWidget";
+import {TextStyles} from "../styles/TextStyles";
 
 
 export default class TimeListingScreen extends Screen {
 
+    state = {
+        elements: []
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state.elements = ProtocolService.getInstance().getEntries();
+        ProtocolService.getInstance().getEmitter().addListener('initialized', this.refreshListing, this);
+    }
+
+    refreshListing() {
+        let entries = ProtocolService.getInstance().getEntries();
+        this.setState({
+            elements: entries
+        });
+    }
+
+    renderItem(item, index, separators) {
+        let duration = new Date(item.item.duration);
+        let start = new Date(item.item.start);
+        let end = new Date(item.item.start + item.item.duration);
+
+        return (
+            <View>
+                <Text style={TextStyles.header.major}>{DateTimeWidget.toTime(duration, true)}h</Text>
+                <Text>{DateTimeWidget.toFullDateTime(start)} bis {DateTimeWidget.toFullDateTime(end)}</Text>
+                <View style={TextStyles.spacer.m} />
+            </View>
+        );
+    }
+
     render() {
         return (
             <View style={ScreenStyles.container}>
-                <Text>Time Listing!</Text>
                 <StatusBar style="auto"/>
+
+                <Pressable
+                    onPress={() => ProtocolService.getInstance()._clear()}
+                >
+                    <Text>Clear all</Text>
+                </Pressable>
+
+                <FlatList
+                    inverted
+                    data={this.state.elements}
+                    renderItem={this.renderItem}
+                    style={{
+                        width: '100%'
+                    }}
+                />
 
                 <ActionButton
                     src={require('../assets/icons/plus.png')}
                     color={Colors.primary}
                     background={Colors.primaryDark}
-                    onPress={() => this.redirect.bind(this, 'AddTime')}
-                    size={40}
+                    onPress={() => {
+                        this.navigation.navigate('AddTime', {
+                            onGoBack: this.refreshListing.bind((this))
+                        })
+                    }}
+                    size={20}
                 />
 
             </View>

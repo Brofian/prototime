@@ -7,9 +7,7 @@ import {Colors} from "../styles/Variables";
 
 export default class HomeScreen extends Screen {
 
-    onActionButtonPress() {
 
-    }
 
     render() {
         return (
@@ -21,8 +19,10 @@ export default class HomeScreen extends Screen {
                     src={require('../assets/icons/list.png')}
                     color={Colors.primary}
                     background={Colors.primaryDark}
-                    onPress={() => this.redirect.bind(this, 'TimeListing')}
-                    size={40}
+                    onPress={() => {
+                        this.navigation.navigate('TimeListing')
+                    }}
+                    size={20}
                 />
 
             </View>

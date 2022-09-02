@@ -1,3 +1,8 @@
+import Storage from "../abstract/Storage";
+import {NativeEventEmitter} from "react-native";
+
+const isDebug = false;
+
 export default class ProtocolService {
 
     static instance = null;
@@ -14,7 +19,8 @@ export default class ProtocolService {
 
 
     constructor() {
-        this.protocolStorage = new ProtocolStorage();
+        this.eventEmitter = new NativeEventEmitter();
+        this.protocolStorage = new ProtocolStorage(this.onStorageChange.bind(this));
 
         this.entryCache = {};
         this.isEntryCacheUpToDate = false;
@@ -22,30 +28,26 @@ export default class ProtocolService {
         this.isDurationCacheUpToDate = false;
     }
 
+    onStorageChange() {
+        this.isEntryCacheUpToDate = false;
+        this.isDurationCacheUpToDate = false;
+        this.eventEmitter.emit('initialized');
+    }
+
     /**
-     *
-     * @param {Date} startDate
+     * @param {int} startTime
      * @param {int} duration
      * @param {string|null} comment
      */
-    createEntry(startDate, duration, comment = null) {
+    createEntry(startTime, duration, comment = null) {
         let entry = {
-            start: startDate.getTime(),
+            start: startTime,
             duration: duration,
             comment: comment
         };
         this.protocolStorage.add(entry);
         this.isEntryCacheUpToDate = false;
         this.isDurationCacheUpToDate = false;
-    }
-
-    /**
-     * @param {Date} startDate
-     * @param {Date} endDate
-     * @returns {number}
-     */
-    static getDuration(startDate, endDate) {
-        return (endDate.getTime() - startDate.getTime());
     }
 
     /**
@@ -60,7 +62,7 @@ export default class ProtocolService {
      * @returns {Object}
      */
     getEntries() {
-        let entries = {};
+        let entries = [];
 
         if (this.isEntryCacheUpToDate) {
             return this.entryCache;
@@ -69,11 +71,12 @@ export default class ProtocolService {
         let datasets = this.protocolStorage.getData();
         for (let key in datasets) {
             if (datasets.hasOwnProperty(key)) {
-                entries[key] = {
-                    start: new Date(datasets[key].start),
+                entries.push({
+                    start: datasets[key].start,
                     duration: datasets[key].duration,
-                    comment: datasets[key].comment
-                };
+                    comment: datasets[key].comment,
+                    key: key // required for flatList component
+                });
             }
         }
 
@@ -100,55 +103,89 @@ export default class ProtocolService {
         return duration;
     }
 
+    _clear() {
+        this.protocolStorage._clear();
+        this.isEntryCacheUpToDate = false;
+        this.isDurationCacheUpToDate = false;
+    }
+
+
+    getEmitter() {
+        return this.eventEmitter;
+    }
+
 }
 
 class ProtocolStorage {
 
-    constructor() {
-        this.storage = {};
+    static storage = {};
+
+    constructor(initCallback) {
         this.isInitialized = false;
+        this.initCallback = initCallback;
         this.desiredLength = 0;
         this.length = 0;
+        this.debugLog('constructor', 'now retrieving length');
         Storage.retrieve('length', this._load.bind(this));
     }
 
     _save() {
-        Storage.store('length', Object.keys(this.storage).length);
+        this.debugLog('_save', 'now storing length '+Object.keys(ProtocolStorage.storage).length);
+
+        Storage.store('length', ''+Object.keys(ProtocolStorage.storage).length);
+
+        this.debugLog('_save', 'now storing items');
         let c = 0;
-        for (let item of this.storage) {
-            Storage.store('item_' + c, JSON.stringify(item));
+        for (let key in ProtocolStorage.storage) {
+            Storage.store('item_' + c, JSON.stringify(ProtocolStorage.storage[key]));
             c++;
         }
+        this.debugLog('_save', 'stored '+c+' items');
+    }
+
+    _clear() {
+        ProtocolStorage.storage = [];
+        this._save();
     }
 
     _load(success, key, item) {
-        if (success) {
+        if (success && item) {
             if (key === 'length') {
-                this.desiredLength = parseInt(item);
-                for (let i = 0; i < this.length; i++) {
+                this.desiredLength = parseInt(item??"0");
+                this.debugLog('_load', 'loaded length of ' + this.desiredLength + '. Now retrieving items');
+                for (let i = 0; i < this.desiredLength; i++) {
                     Storage.retrieve('item_' + i, this._load.bind(this));
                 }
+                this.debugLog('_load', 'finished requesting items');
             } else {
-                this.storage[key] = JSON.parse(item);
+                ProtocolStorage.storage[key] = JSON.parse(item);
                 this.length++;
-                if (this.length >= this.desiredLength) {
+                this.debugLog('_load', 'loaded item '+key+' as number '+this.length);
+                if (!this.isInitialized && this.length >= this.desiredLength) {
                     this.isInitialized = true;
+                    this.initCallback();
+                    this.debugLog('_load', 'all request items loaded');
                 }
             }
+        }
+        else {
+            console.error(key);
         }
     }
 
     add(obj) {
-        this.storage['item_' + this.length] = obj;
+        this.debugLog('add', 'now adding ' + JSON.stringify(obj) + ' as ' + 'item_' + this.length);
+        ProtocolStorage.storage['item_' + this.length] = obj;
         this.length++;
+        this._save();
     }
 
     set(obj, id) {
         if (id >= 0 && id < this.length) {
-            this.storage['item_' + id] = obj;
+            ProtocolStorage.storage['item_' + id] = obj;
             return id;
         } else {
-            this._add(obj);
+            this.add(obj);
             return this.length;
         }
     }
@@ -158,8 +195,13 @@ class ProtocolStorage {
     }
 
     getData() {
-        return this.storage;
+        return ProtocolStorage.storage;
     }
 
+    debugLog(method, text) {
+        if(isDebug) {
+            console.log(`[Protocol] ${method}: ${text}`);
+        }
+    }
 
 }

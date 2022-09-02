@@ -7,18 +7,11 @@ export default class Screen extends Component {
     constructor(props) {
         super(props);
         this.navigation = props.navigation;
+        this.route = props.route;
         this.onConstruct();
     }
 
     onConstruct() {}
-
-    redirect(screenName) {
-        this.navigation.navigate(screenName);
-    }
-
-    closeScreen() {
-        this.navigation.goBack(null);
-    }
 
     render() {
         return (

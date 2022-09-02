@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import {Button, Pressable, Text, TextInput, View} from 'react-native';
+import {Button, LogBox, Pressable, Text, TextInput, View} from 'react-native';
 import Screen from "../abstract/Screen";
 import {ScreenStyles} from "../styles/ScreenStyles";
 import DateTimeWidget from "../components/DateTimeWidget";
@@ -8,19 +8,22 @@ import {TextStyles} from "../styles/TextStyles";
 import {TableLayoutStyles} from "../styles/TableLayoutStyles";
 import ProtocolService from "../services/ProtocolService";
 
-
+LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+]);
 
 export default class AddTimeScreen extends Screen {
 
+
     state = {
-        start: new Date(),
-        end: new Date(),
+        start: (new Date()).getTime(),
+        end: (new Date()).getTime(),
         comment: '',
         error: ''
     }
 
     onSave() {
-        let duration = ProtocolService.getDuration(this.state.start, this.state.end);
+        let duration = this.state.end - this.state.start;
 
         if(duration < (1000*60*5)) {
             this.setState({
@@ -29,24 +32,30 @@ export default class AddTimeScreen extends Screen {
             return;
         }
 
-        this.setState({
-            error: ''
-        });
-
         try {
             ProtocolService.getInstance().createEntry(
                 this.state.start,
                 duration,
                 this.comment
             );
+
+            this.setState({
+                error: ''
+            });
         }
         catch (err) {
             this.setState({
-                error: err
+                error: err.toString()
             });
+            return;
         }
 
-        this.closeScreen();
+        this.route.params.onGoBack();
+        this.navigation.goBack(null);
+    }
+
+    getCurrentStart() {
+        return this.state.start;
     }
 
     render() {
@@ -65,7 +74,7 @@ export default class AddTimeScreen extends Screen {
                     <View style={{ flex: 2, alignItems: 'flex-start' }}>
                         <DateTimeWidget
                             value={this.state.start}
-                            onChange={(newDate) => this.setState({ start: newDate})}
+                            onChange={(newTime) => {this.setState({ start: newTime})}}
                         />
                     </View>
                 </View>
@@ -80,8 +89,8 @@ export default class AddTimeScreen extends Screen {
                     <View style={{ flex: 2, alignItems: 'flex-start' }}>
                         <DateTimeWidget
                             value={this.state.end}
-                            minDate={this.state.start}
-                            onChange={(newDate) => this.setState({ end: newDate})}
+                            minDateFunc={this.getCurrentStart.bind(this)}
+                            onChange={(newTime) => this.setState({ end: newTime})}
                         />
                     </View>
                 </View>
