@@ -16,6 +16,10 @@ export default class Screen extends Component {
         this.navigation.navigate(screenName);
     }
 
+    closeScreen() {
+        this.navigation.goBack(null);
+    }
+
     render() {
         return (
             <View style={styles.container}>

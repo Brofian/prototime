@@ -1,11 +1,21 @@
 import {StyleSheet} from "react-native";
-import {Colors} from "./Variables";
 
 export const TableLayoutStyles = StyleSheet.create({
     row: {
-
+        flex: 0,
+        flexDirection: 'row',
+        alignItems: 'center',
+        alignSelf: 'flex-start'
     },
     column: {
+        1: {
 
+        },
+        2: {
+
+        },
+        3: {
+
+        }
     }
 });

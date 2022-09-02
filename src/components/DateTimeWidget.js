@@ -10,12 +10,14 @@ const weekdays = ['So','Mo','Di','Mi','Do','Fr','Sa'];
 export default class DateTimeWidget extends Component {
 
     state = {
-        value: new Date()
+        value: new Date(),
+        minDate: null
     }
 
     constructor(props) {
         super(props);
         this.onChange = props.onChange;
+        this.state.minDate = props.minDate;
         this.state.value = props.value;
     }
 
@@ -24,12 +26,13 @@ export default class DateTimeWidget extends Component {
             value: this.state.value,
             onChange: this.onDateTimePickerChanged.bind(this,  mode),
             mode: mode,
+            minimumDate: this.state.minDate,
             is24Hour: true,
         });
     }
 
     onDateTimePickerChanged(mode, event) {
-        if(event.nativeEvent.type !== 'dismissed') {
+        if(event.type === 'set') {
             let configuration = new Date(event.nativeEvent.timestamp);
 
             if(mode === 'date') {
@@ -88,6 +91,7 @@ export default class DateTimeWidget extends Component {
                 <TouchableOpacity
                     onPress={() => this.showDateTimePicker('date')}
                     style={WidgetStyles.dateTime.left}
+                    activeOpacity={0.8}
                 >
                     <Text>{this.toCalendarDate(this.state.value)}</Text>
                 </TouchableOpacity>
@@ -95,6 +99,7 @@ export default class DateTimeWidget extends Component {
                 <TouchableOpacity
                     onPress={() => this.showDateTimePicker('time')}
                     style={WidgetStyles.dateTime.right}
+                    activeOpacity={0.8}
                 >
                     <Text>{this.toTime(this.state.value)}</Text>
                 </TouchableOpacity>

@@ -2,6 +2,9 @@ export default class ProtocolService {
 
     static instance = null;
 
+    /**
+     * @returns {ProtocolService}
+     */
     static getInstance() {
         if (ProtocolService.instance === null) {
             ProtocolService.instance = new ProtocolService();
@@ -41,7 +44,7 @@ export default class ProtocolService {
      * @param {Date} endDate
      * @returns {number}
      */
-    getDuration(startDate, endDate) {
+    static getDuration(startDate, endDate) {
         return (endDate.getTime() - startDate.getTime());
     }
 
@@ -49,7 +52,7 @@ export default class ProtocolService {
      * @param {Date} startDate
      * @param {int} duration
      */
-    getEndDate(startDate, duration) {
+    static getEndDate(startDate, duration) {
         return new Date(startDate.getTime() + duration);
     }
 

@@ -6,18 +6,33 @@ export const WidgetStyles = StyleSheet.create({
         main: {
             flexDirection: 'row',
             borderColor: Colors.primary,
-            borderWidth: 2,
             borderRadius: 5,
-            backgroundColor: Colors.primaryLight
+            overflow: 'hidden'
         },
         left: {
             padding: 10,
+            paddingRight: 5,
             backgroundColor: Colors.primaryLight
         },
         right: {
             padding: 10,
-            paddingLeft: 0,
+            paddingLeft: 5,
             backgroundColor: Colors.primaryLight
         }
     },
+    textarea: {
+        borderWidth: 1,
+        borderColor: Colors.gray800,
+        width: '100%',
+        minHeight: 100,
+        padding: 10,
+        textAlignVertical: 'top'
+    },
+    button: {
+        backgroundColor: Colors.primaryLight,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        overflow: 'hidden'
+    }
 });
