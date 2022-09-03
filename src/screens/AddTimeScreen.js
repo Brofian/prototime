@@ -7,8 +7,8 @@ import {WidgetStyles} from "../styles/WidgetStyles";
 import {TextStyles} from "../styles/TextStyles";
 import {TableLayoutStyles} from "../styles/TableLayoutStyles";
 import ProtocolService from "../services/ProtocolService";
-import NumericInput from "react-native-numeric-input";
 import {Colors} from "../styles/Variables";
+import NumberSelect from "../components/NumberSelect";
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -73,13 +73,13 @@ export default class AddTimeScreen extends Screen {
         return (
             <View style={ScreenStyles.container}>
 
-                <Text style={TextStyles.header.minor}>Füge einen neuen Eintrag hinzu</Text>
+                <Text style={[TextStyles.header.minor, TextStyles.default]}>Füge einen neuen Eintrag hinzu</Text>
 
                 <View style={TextStyles.spacer.xl}></View>
 
                 <View style={TableLayoutStyles.row}>
                     <View style={{ flex: 1 }}>
-                        <Text>Anfang: </Text>
+                        <Text style={TextStyles.default}>Anfang: </Text>
                     </View>
 
                     <View style={{ flex: 2, alignItems: 'flex-start' }}>
@@ -94,7 +94,7 @@ export default class AddTimeScreen extends Screen {
 
                 <View style={TableLayoutStyles.row}>
                     <View style={{ flex: 1 }}>
-                        <Text>Ende: </Text>
+                        <Text style={TextStyles.default}>Ende: </Text>
                     </View>
 
                     <View style={{ flex: 2, alignItems: 'flex-start' }}>
@@ -111,19 +111,14 @@ export default class AddTimeScreen extends Screen {
 
                 <View style={TableLayoutStyles.row}>
                     <View style={{ flex: 1 }}>
-                        <Text>Pause (min): </Text>
+                        <Text style={TextStyles.default}>Pause (min): </Text>
                     </View>
 
                     <View style={{ flex: 2, alignItems: 'flex-start' }}>
-                        <NumericInput
+                        <NumberSelect
                             onChange={value => this.setState({break: parseInt(value??'0')})}
-                            leftButtonBackgroundColor={Colors.primaryLight}
-                            rightButtonBackgroundColor={Colors.primaryLight}
-                            rounded={false}
-                            containerStyle={{borderRadius: 5, overflow: 'hidden', height: 40}}
-                            borderColor={Colors.transparent}
-                            minValue={0}
-                            maxValue={600}
+                            min={0}
+                            max={600}
                         />
                     </View>
                 </View>
@@ -137,6 +132,7 @@ export default class AddTimeScreen extends Screen {
                     onChangeText={(newText) => {this.setState({comment: newText})}}
                     value={this.state.comment}
                     placeholder={'Beschreibung'}
+                    placeholderTextColor={Colors.text}
                 />
 
                 <View style={TextStyles.spacer.xl}></View>

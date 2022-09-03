@@ -39,10 +39,14 @@ export default class TimeListingScreen extends Screen {
 
         return (
             <View>
-                <Text style={TextStyles.header.major}>{DateTimeWidget.toTime(duration, true)}h</Text>
-                <Text>{DateTimeWidget.toFullDateTime(start)} bis {DateTimeWidget.toFullDateTime(end)}</Text>
-                {!breakTime ? '' : <Text>Zzgl. {breakTime} Minuten Pause</Text>}
-                {!comment       ? '' : <Text>{comment}</Text>}
+                <Text style={[TextStyles.header.major, TextStyles.default]}>
+                    {DateTimeWidget.toTime(duration, true)}h
+                </Text>
+                <Text style={TextStyles.default}>
+                    {DateTimeWidget.toFullDateTime(start)} bis {DateTimeWidget.toFullDateTime(end)}
+                </Text>
+                {!breakTime     ? '' : <Text style={TextStyles.default}>Zzgl. {breakTime} Minuten Pause</Text>}
+                {!comment       ? '' : <Text style={TextStyles.default}>{comment}</Text>}
                 <View style={TextStyles.spacer.m} />
             </View>
         );
@@ -52,12 +56,6 @@ export default class TimeListingScreen extends Screen {
         return (
             <View style={ScreenStyles.container}>
                 <StatusBar style="auto"/>
-
-                <Pressable
-                    //onPress={() => ProtocolService.getInstance()._clear()}
-                >
-                    <Text>Clear all</Text>
-                </Pressable>
 
                 <FlatList
                     data={this.state.elements}

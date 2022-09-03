@@ -7,6 +7,7 @@ import {TableLayoutStyles} from "../styles/TableLayoutStyles";
 import {TextStyles} from "../styles/TextStyles";
 import {Colors} from "../styles/Variables";
 import NumericInput from "react-native-numeric-input";
+import NumberSelect from "../components/NumberSelect";
 
 export default class ConfigScreen extends Screen {
 
@@ -35,17 +36,12 @@ export default class ConfigScreen extends Screen {
                             <Text>Stunden pro Zeitabschnitt</Text>
                         </View>
                         <View style={{ flex: 3, alignItems: 'center' }}>
-                            <NumericInput
+                            <NumberSelect
                                 onChange={value => {
                                     this.setState({hoursPerUnit: parseInt(value??'0')}, this.onChange.bind(this));
                                 }}
-                                leftButtonBackgroundColor={Colors.primaryLight}
-                                rightButtonBackgroundColor={Colors.primaryLight}
-                                rounded={false}
-                                containerStyle={{borderRadius: 5, overflow: 'hidden', height: 40}}
-                                borderColor={Colors.transparent}
-                                minValue={0}
-                                initValue={this.state.hoursPerUnit}
+                                min={0}
+                                initial={this.state.hoursPerUnit}
                             />
                         </View>
                     </View>
@@ -57,18 +53,13 @@ export default class ConfigScreen extends Screen {
                             <Text>Standard Minuten pro Pause</Text>
                         </View>
                         <View style={{ flex: 3, alignItems: 'center' }}>
-                            <NumericInput
+                            <NumberSelect
                                 onChange={value => {
                                     this.setState({defaultBreakTime: parseInt(value??'0')}, this.onChange.bind(this));
                                 }}
-                                leftButtonBackgroundColor={Colors.primaryLight}
-                                rightButtonBackgroundColor={Colors.primaryLight}
-                                rounded={false}
-                                containerStyle={{borderRadius: 5, overflow: 'hidden', height: 40}}
-                                borderColor={Colors.transparent}
-                                minValue={0}
-                                maxValue={600}
-                                initValue={this.state.defaultBreakTime}
+                                min={0}
+                                max={600}
+                                initial={this.state.defaultBreakTime}
                             />
                         </View>
                     </View>
@@ -103,6 +94,11 @@ export default class ConfigScreen extends Screen {
                                     {
                                         text: "Abbrechen",
                                         style: "cancel",
+                                    },
+                                    {
+                                        text: "Löschen",
+                                        style: "confirm",
+                                        //onPress={() => ProtocolService.getInstance()._clear()}
                                     },
                                 ],
                             );

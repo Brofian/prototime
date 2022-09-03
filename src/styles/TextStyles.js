@@ -2,6 +2,12 @@ import {StyleSheet} from "react-native";
 import {Colors} from "./Variables";
 
 export const TextStyles = StyleSheet.create({
+    default: {
+      color: Colors.text
+    },
+    dark: {
+      color: Colors.background
+    },
     spacer: {
         s: {
             height: 5

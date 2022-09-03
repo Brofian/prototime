@@ -20,6 +20,12 @@ export const WidgetStyles = StyleSheet.create({
             backgroundColor: Colors.primaryLight
         }
     },
+    numberSelect: {
+      button: {
+          backgroundColor: Colors.primaryLight,
+          borderWidth: 0
+      }
+    },
     textarea: {
         borderWidth: 1,
         borderColor: Colors.gray800,
@@ -35,4 +41,5 @@ export const WidgetStyles = StyleSheet.create({
         borderRadius: 5,
         overflow: 'hidden'
     }
+
 });

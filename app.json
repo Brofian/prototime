@@ -7,7 +7,7 @@
     "android": {
       "package": "de.fabianholzwarth.prototime"
     },
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "sdkVersion": "46.0.0"
   }
 }

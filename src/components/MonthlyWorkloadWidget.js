@@ -1,7 +1,6 @@
 import {Component} from "react";
 import {Pressable, Text, View} from "react-native";
 import ProtocolService from "../services/ProtocolService";
-import DateTimeWidget from "./DateTimeWidget";
 import CircularProgress from "react-native-circular-progress-indicator";
 import {Colors} from "../styles/Variables";
 import {TextStyles} from "../styles/TextStyles";
@@ -63,7 +62,7 @@ export default class MonthlyWorkloadWidget extends Component {
 
                 <View style={{flex: 5, flexDirection: 'row', width: '100%'}}>
                     <View style={{flex: 1, alignItems: 'center'}}>
-                        <Text>Gesamt-Pensum</Text>
+                        <Text style={TextStyles.default}>Gesamt-Pensum</Text>
                         <View style={TextStyles.spacer.l} />
                         <CircularProgress
                             value={totalWorkMinutes}
@@ -74,7 +73,7 @@ export default class MonthlyWorkloadWidget extends Component {
                             progressValueColor={isTotalEndangered ? Colors.warning : Colors.primaryLight}
                             activeStrokeColor={isTotalEndangered  ? Colors.warning : Colors.primaryLight}
                             title={'/ '+MonthlyWorkloadWidget.minToTimer(totalWorkload+totalWorkMinutes)}
-                            titleColor={'white'}
+                            titleColor={Colors.text}
                             titleStyle={{fontSize: 15}}
                             progressFormatter={(value) => {
                                 'worklet';
@@ -88,7 +87,7 @@ export default class MonthlyWorkloadWidget extends Component {
                     </View>
 
                     <View style={{flex: 1, alignItems: 'center'}}>
-                        <Text>Monats-Pensum</Text>
+                        <Text style={TextStyles.default}>Monats-Pensum</Text>
                         <View style={TextStyles.spacer.l} />
                         <CircularProgress
                             value={monthlyWorkMinutes}
@@ -99,7 +98,7 @@ export default class MonthlyWorkloadWidget extends Component {
                             progressValueColor={Colors.primaryLight}
                             activeStrokeColor={Colors.primaryLight}
                             title={'/ '+MonthlyWorkloadWidget.minToTimer(monthlyWorkload+monthlyWorkMinutes)}
-                            titleColor={'white'}
+                            titleColor={Colors.text}
                             titleStyle={{fontSize: 15}}
                             progressFormatter={(value) => {
                                 'worklet';
@@ -118,7 +117,7 @@ export default class MonthlyWorkloadWidget extends Component {
                         onPress={this.onProtocolInitialized.bind(this)}
                         style={ButtonStyles.primary}
                     >
-                        <Text>Aktualisieren</Text>
+                        <Text style={TextStyles.dark}>Aktualisieren</Text>
                     </Pressable>
                 </View>
                 <View style={{flex: 7, alignSelf: 'stretch', alignItems: 'center' }}>
@@ -126,13 +125,13 @@ export default class MonthlyWorkloadWidget extends Component {
                         onPress={() => this.navigation.navigate('Config')}
                         style={ButtonStyles.secondary}
                     >
-                        <Text>Konfiguration</Text>
+                        <Text style={TextStyles.default}>Konfiguration</Text>
                     </Pressable>
                 </View>
 
                 <View style={{flex: 1}}>
-                    <Text>{this.monthsSinceBegin} Monat{this.monthsSinceBegin===1?'':'e'} seit Beginn</Text>
-                    <Text>Prototime v0.1.0</Text>
+                    <Text style={TextStyles.default}>{this.monthsSinceBegin} Monat{this.monthsSinceBegin===1?'':'e'} seit Beginn</Text>
+                    <Text style={TextStyles.default}>Prototime v0.1.0</Text>
                 </View>
 
 

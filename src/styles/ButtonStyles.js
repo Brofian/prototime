@@ -30,7 +30,7 @@ export const ButtonStyles = StyleSheet.create({
     secondary: {
         paddingVertical: 10,
         paddingHorizontal: 20,
-        backgroundColor: Colors.gray800,
+        backgroundColor: Colors.gray300,
         borderRadius: 30
     }
 });
