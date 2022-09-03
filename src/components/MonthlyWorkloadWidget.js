@@ -131,7 +131,7 @@ export default class MonthlyWorkloadWidget extends Component {
 
                 <View style={{flex: 1}}>
                     <Text style={TextStyles.default}>{this.monthsSinceBegin} Monat{this.monthsSinceBegin===1?'':'e'} seit Beginn</Text>
-                    <Text style={TextStyles.default}>Prototime v0.1.0</Text>
+                    <Text style={TextStyles.default}>Prototime v0.2.0</Text>
                 </View>
 
 
