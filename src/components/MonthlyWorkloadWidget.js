@@ -6,6 +6,8 @@ import {Colors} from "../styles/Variables";
 import {TextStyles} from "../styles/TextStyles";
 import {ButtonStyles} from "../styles/ButtonStyles";
 import EventSystem from "../services/EventSystem";
+import ConfigService from "../services/ConfigService";
+import {defaultConfig} from "../screens/ConfigScreen";
 
 export default class MonthlyWorkloadWidget extends Component {
 
@@ -13,17 +15,35 @@ export default class MonthlyWorkloadWidget extends Component {
         workload: 0, // the open time (months since start * monthlyExpense - total worked time)
         workloadMonth: 0, // the open time (monthlyExpense - monthly worked time)
         totalTime: 0, // the total worked time
-        monthlyTime: 0 // the total worked time of this month
+        monthlyTime: 0, // the total worked time of this month
+        measurementBeginning: new Date(defaultConfig.startOfMeasurement),
+        monthsSinceBegin: 0
     }
 
     constructor(props) {
         super(props);
         this.montlyExpenseHours = 27; // 27 hours in milliseconds
-        this.measurementBeginning = new Date('2022-09-01');
-        this.monthsSinceBegin = this.monthDiff(this.measurementBeginning, new Date())+1;
+        this.state.measurementBeginning = new Date(ConfigService.getInstance().get('startOfMeasurementMs', defaultConfig.startOfMeasurement));
+        this.state.monthsSinceBegin = this.monthDiff(this.state.measurementBeginning, new Date())+1;
         this.navigation = props.navigation;
 
         EventSystem.subscribe('initialized', this.onProtocolInitialized, this);
+        EventSystem.subscribe('configLoaded', this.onConfigChanged, this);
+        EventSystem.subscribe('configChanged', this.onConfigChanged, this);
+    }
+
+    onConfigChanged() {
+        let measurementBeginning = new Date(ConfigService.getInstance().get('startOfMeasurementMs', defaultConfig.startOfMeasurement));
+        let monthSinceBegin = this.monthDiff(measurementBeginning, new Date())+1;
+
+        this.setState({
+            measurementBeginning: measurementBeginning,
+            monthsSinceBegin: monthSinceBegin
+        });
+    }
+
+    componentDidMount() {
+        this.onProtocolInitialized();
     }
 
     onProtocolInitialized() {
@@ -42,7 +62,6 @@ export default class MonthlyWorkloadWidget extends Component {
             }
         }
 
-
         this.setState({
             totalTime: totalTime,
             monthlyTime: monthlyTime
@@ -53,9 +72,11 @@ export default class MonthlyWorkloadWidget extends Component {
     render() {
         let totalWorkMinutes = this.state.totalTime / (1000 * 60);
         let monthlyWorkMinutes = this.state.monthlyTime / (1000 * 60);
-        let totalWorkload = (this.monthsSinceBegin * this.montlyExpenseHours * 60) - totalWorkMinutes;
+        let totalWorktime = (this.state.monthsSinceBegin * this.montlyExpenseHours * 60);
+        let totalWorkload = totalWorktime - totalWorkMinutes;
         let monthlyWorkload = (this.montlyExpenseHours * 60) - monthlyWorkMinutes;
 
+        // true, if there is more work to be done, than planed for one month
         let isTotalEndangered = totalWorkload > (this.montlyExpenseHours*60);
 
         return (
@@ -63,26 +84,20 @@ export default class MonthlyWorkloadWidget extends Component {
 
                 <View style={{flex: 5, flexDirection: 'row', width: '100%'}}>
                     <View style={{flex: 1, alignItems: 'center'}}>
-                        <Text style={TextStyles.default}>Gesamt-Pensum</Text>
+                        <Text style={TextStyles.default}>Status</Text>
                         <View style={TextStyles.spacer.l} />
                         <CircularProgress
-                            value={totalWorkMinutes}
+                            value={-totalWorkload}
                             initialValue={'0'}
-                            maxValue={Math.max(totalWorkload+totalWorkMinutes, totalWorkMinutes)}
+                            maxValue={Math.max(totalWorktime, monthlyWorkload)}
                             radius={80}
                             duration={500+Math.random()*500}
                             progressValueColor={isTotalEndangered ? Colors.warning : Colors.primaryLight}
                             activeStrokeColor={isTotalEndangered  ? Colors.warning : Colors.primaryLight}
-                            title={'/ '+MonthlyWorkloadWidget.minToTimer(totalWorkload+totalWorkMinutes)}
-                            titleColor={Colors.text}
-                            titleStyle={{fontSize: 15}}
                             progressFormatter={(value) => {
                                 'worklet';
-                                let h = Math.floor(value/60);
-                                h = h>9 ? h: '0'+h;
-                                let m = Math.floor(value%60);
-                                m = m>9 ? m: '0'+m;
-                                return h+':'+m;
+
+                                return (value > 0 ? '+':'')+MonthlyWorkloadWidget.minToTimer(value);
                             }}
                         />
                     </View>
@@ -101,14 +116,7 @@ export default class MonthlyWorkloadWidget extends Component {
                             title={'/ '+MonthlyWorkloadWidget.minToTimer(monthlyWorkload+monthlyWorkMinutes)}
                             titleColor={Colors.text}
                             titleStyle={{fontSize: 15}}
-                            progressFormatter={(value) => {
-                                'worklet';
-                                let h = Math.floor(value/60);
-                                h = h>9 ? h: '0'+h;
-                                let m = Math.floor(value%60);
-                                m = m>9 ? m: '0'+m;
-                                return `${h}:${m}`;
-                            }}
+                            progressFormatter={MonthlyWorkloadWidget.minToTimer}
                         />
                     </View>
                 </View>
@@ -131,22 +139,28 @@ export default class MonthlyWorkloadWidget extends Component {
                 </View>
 
                 <View style={{flex: 1}}>
-                    <Text style={TextStyles.default}>{this.monthsSinceBegin} Monat{this.monthsSinceBegin===1?'':'e'} seit Beginn</Text>
-                    <Text style={TextStyles.default}>Prototime v0.2.0</Text>
+                    <Text style={TextStyles.default}>{this.state.monthsSinceBegin} Monat{this.state.monthsSinceBegin===1?'':'e'} seit Beginn</Text>
+                    <Text style={TextStyles.camouflage}>Prototime v0.2.5 (c) Fabian Holzwarth</Text>
                 </View>
-
 
             </View>
         );
     }
 
     static minToTimer(min) {
-        let hours = Math.floor(min/60);
-        hours = hours>9 ? hours : '0'+hours;
-        let minutes = Math.floor(min%60);
-        minutes = minutes>9 ? minutes : '0'+minutes;
+        'worklet';
 
-        return `${hours}:${minutes}`;
+        let hours = Math.abs(Math.floor(min/60));
+        if(hours < 10) {
+            hours = '0'+hours;
+        }
+
+        let minutes = Math.abs(Math.floor(min%60));
+        if(minutes < 10) {
+            minutes = '0'+minutes;
+        }
+
+        return `${min<0?'-':''}${hours}:${minutes}`;
     }
 
     /**

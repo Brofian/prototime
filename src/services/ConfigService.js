@@ -6,7 +6,7 @@ export default class ConfigService {
     static instance = null;
 
     /**
-     * @returns {ProtocolService}
+     * @returns {ConfigService}
      */
     static getInstance() {
         if (ConfigService.instance === null) {
@@ -36,7 +36,7 @@ export default class ConfigService {
     {
         if(success) {
             this.configuration = JSON.parse(item??'{}');
-            this._onStorageChange();
+            EventSystem.publish('configLoaded');
         }
     }
 
@@ -50,7 +50,9 @@ export default class ConfigService {
     set(key, value) {
         this.configuration[key] = value;
         this._onStorageChange();
-        // save
+    }
+
+    save() {
         Storage.store('config', JSON.stringify(this.configuration));
     }
 }

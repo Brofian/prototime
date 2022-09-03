@@ -1,31 +1,19 @@
 import {Colors} from "../styles/Variables";
 import NumericInput from "react-native-numeric-input";
 import {Component} from "react";
-import Icon from 'react-native-vector-icons/Ionicons'
-import {TextStyles} from "../styles/TextStyles";
-import Counter from "react-native-counters";
 import {WidgetStyles} from "../styles/WidgetStyles";
+import FixedCounter from "../extensions/Counter";
 
 
 export default class NumberSelect extends Component {
 
-    constructor(props) {
-        super(props);
-        this.onChange = props.onChange;
-        this.min = props.min ?? null;
-        this.max = props.max ?? null;
-        this.initial = props.initial ?? 0;
-        this.useNumericInput = props.useOld ?? false;
-    }
-
-
     renderCounter() {
         return (
-            <Counter
-                start={this.initial}
-                onChange={this.onChange}
-                min={this.min}
-                max={this.max}
+            <FixedCounter
+                start={this.props.initial ?? 0}
+                onChange={this.props.onChange ?? null}
+                min={this.props.min ?? -999999}
+                max={this.props.max ??  999999}
                 countTextStyle={{
                     color: Colors.text,
                     width: 50,
@@ -42,15 +30,15 @@ export default class NumberSelect extends Component {
     renderNumericInput() {
         return (
             <NumericInput
-                onChange={this.onChange}
+                onChange={this.props.onChange}
                 leftButtonBackgroundColor={Colors.primaryLight}
                 rightButtonBackgroundColor={Colors.primaryLight}
                 rounded={false}
                 containerStyle={{borderRadius: 5, overflow: 'hidden', height: 40}}
                 borderColor={Colors.transparent}
-                minValue={0}
-                maxValue={600}
-                initValue={this.initial}
+                minValue={this.props.min}
+                maxValue={this.props.max}
+                initValue={this.props.initial}
                 textColor={Colors.text}
                 customDecIcon={"-"}
             />
@@ -58,7 +46,7 @@ export default class NumberSelect extends Component {
     }
 
     render() {
-        return this.useNumericInput ? this.renderNumericInput() : this.renderCounter();
+        return (this.props.useOld ?? false) ? this.renderNumericInput() : this.renderCounter();
     }
 
 }

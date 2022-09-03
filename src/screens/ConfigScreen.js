@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import {Alert, Button, Image, Pressable, Text, TouchableHighlight, View} from 'react-native';
+import {Pressable, Text, View} from 'react-native';
 import Screen from "../abstract/Screen";
 import {ScreenStyles} from "../styles/ScreenStyles";
 import DateTimeWidget from "../components/DateTimeWidget";
@@ -10,21 +10,66 @@ import AlertHelper from "../services/AlertHelper";
 import DebugHelper from "../services/DebugHelper";
 import ProtocolService from "../services/ProtocolService";
 import {ButtonStyles} from "../styles/ButtonStyles";
+import EventSystem from "../services/EventSystem";
+import ConfigService from "../services/ConfigService";
+
+export const defaultConfig = {
+    timeUnit: 'month',
+    hoursPerUnit: 40,
+    breakTime: 0,
+    startOfMeasurement: (new Date('2022/09/01')).getTime(),
+
+};
 
 export default class ConfigScreen extends Screen {
 
     state = {
-        unit: 'month',
-        hoursPerUnit: 40,
-        defaultBreakTime: 0,
-        startOfMeasurementMs: 0
+        unit: defaultConfig.timeUnit,
+        hoursPerUnit: defaultConfig.hoursPerUnit,
+        defaultBreakTime: defaultConfig.breakTime,
+        startOfMeasurementMs: defaultConfig.startOfMeasurement
     }
 
+    constructor(props) {
+        super(props);
+        this.hasLoadedConfigOnce = false;
+        EventSystem.subscribe('configLoaded', this.updateConfig, this);
+        this.updateConfig(true);
+    }
+
+    updateConfig(preMount = false) {
+        let config = ConfigService.getInstance();
+        let newValues = {
+            unit:                   config.get('timeUnit', defaultConfig.timeUnit),
+            hoursPerUnit:           config.get('hoursPerTimeUnit', defaultConfig.hoursPerUnit),
+            defaultBreakTime:       config.get('defaultBreakTime', defaultConfig.breakTime),
+            startOfMeasurementMs:   config.get('startOfMeasurementMs', defaultConfig.startOfMeasurement),
+        };
+
+        if(preMount === true) {
+            this.state = newValues;
+        }
+        else {
+            this.setState(newValues);
+        }
+
+        this.hasLoadedConfigOnce = true;
+    }
 
     onChange() {
-        // save on the fly
-    }
+        if(!this.hasLoadedConfigOnce) {
+            return;
+        }
 
+        let config = ConfigService.getInstance();
+        config.set('timeUnit', this.state.unit);
+        config.set('hoursPerTimeUnit', this.state.hoursPerUnit);
+        config.set('defaultBreakTime', this.state.defaultBreakTime);
+        config.set('startOfMeasurementMs', this.state.startOfMeasurementMs);
+
+        config.save();
+        this.updateConfig();
+    }
 
     render() {
         return (
@@ -75,6 +120,7 @@ export default class ConfigScreen extends Screen {
                         <View style={{ flex: 3, alignItems: 'center' }}>
                             <DateTimeWidget
                                 value={this.state.startOfMeasurementMs}
+                                hideTime={true}
                                 onChange={(newTime) => {
                                     this.setState({ startOfMeasurementMs: newTime}, this.onChange.bind(this))
                                 }}
@@ -83,8 +129,6 @@ export default class ConfigScreen extends Screen {
                     </View>
 
                 </View>
-
-
 
                 <View>
                     <Pressable

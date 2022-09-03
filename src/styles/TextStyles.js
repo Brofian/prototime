@@ -8,6 +8,9 @@ export const TextStyles = StyleSheet.create({
     dark: {
       color: Colors.background
     },
+    camouflage: {
+      color: Colors.gray300
+    },
     spacer: {
         s: {
             height: 5

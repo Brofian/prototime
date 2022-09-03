@@ -11,12 +11,10 @@ export const WidgetStyles = StyleSheet.create({
         },
         left: {
             padding: 10,
-            paddingRight: 5,
             backgroundColor: Colors.primaryLight
         },
         right: {
             padding: 10,
-            paddingLeft: 5,
             backgroundColor: Colors.primaryLight
         }
     },
@@ -32,7 +30,8 @@ export const WidgetStyles = StyleSheet.create({
         width: '100%',
         minHeight: 100,
         padding: 10,
-        textAlignVertical: 'top'
+        textAlignVertical: 'top',
+        color: Colors.text
     },
     button: {
         backgroundColor: Colors.primaryLight,

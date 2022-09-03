@@ -9,6 +9,8 @@ import {TableLayoutStyles} from "../styles/TableLayoutStyles";
 import ProtocolService from "../services/ProtocolService";
 import {Colors} from "../styles/Variables";
 import NumberSelect from "../components/NumberSelect";
+import ConfigService from "../services/ConfigService";
+import {defaultConfig} from "./ConfigScreen";
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -22,7 +24,9 @@ export default class AddTimeScreen extends Screen {
         end: (new Date()).getTime(),
         break: 0,
         comment: '',
-        error: ''
+        error: '',
+
+        breakDefault: 20
     }
 
     constructor(props) {
@@ -119,6 +123,7 @@ export default class AddTimeScreen extends Screen {
                             onChange={value => this.setState({break: parseInt(value??'0')})}
                             min={0}
                             max={600}
+                            initial={ConfigService.getInstance().get('defaultBreakTime', defaultConfig.breakTime)}
                         />
                     </View>
                 </View>
@@ -131,7 +136,7 @@ export default class AddTimeScreen extends Screen {
                     style={WidgetStyles.textarea}
                     onChangeText={(newText) => {this.setState({comment: newText})}}
                     value={this.state.comment}
-                    placeholder={'Beschreibung'}
+                    placeholder={'Beschreibung (optional)'}
                     placeholderTextColor={Colors.text}
                 />
 

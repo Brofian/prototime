@@ -17,7 +17,19 @@ export default class DateTimeWidget extends Component {
         super(props);
         this.onChange = props.onChange;
         this.getMinDateFunc = props.minDateFunc;
+        this.hideDate = props.hideDate ?? false;
+        this.hideTime = (props.hideTime ?? false) && !this.hideDate;
         this.state.value = props.value;
+    }
+
+
+    static lastValue = null;
+    static getDerivedStateFromProps(nextProps) {
+        if(nextProps.value === DateTimeWidget.lastValue) {
+            return {};
+        }
+
+        return { value: nextProps.value }
     }
 
     showDateTimePicker(mode) {
@@ -38,7 +50,15 @@ export default class DateTimeWidget extends Component {
     onDateTimePickerChanged(mode, event) {
         if(event.type === 'set') {
             let configuration = new Date(event.nativeEvent.timestamp);
-            let current = new Date(this.state.value);
+            let current;
+
+            if(this.hideTime || this.hideDate) {
+                current = new Date(0);
+                current.setUTCHours(12);
+            }
+            else {
+                current = new Date(this.state.value);
+            }
 
             if(mode === 'date') {
                 current.setDate(configuration.getDate());
@@ -50,6 +70,7 @@ export default class DateTimeWidget extends Component {
                 current.setHours(configuration.getHours());
             }
 
+            DateTimeWidget.lastValue = this.state.value;
             this.setState({
                 value: current.getTime()
             }, this.onAfterStateChanged.bind(this));
@@ -100,21 +121,29 @@ export default class DateTimeWidget extends Component {
         return (
             <View style={WidgetStyles.dateTime.main}>
 
-                <TouchableOpacity
-                    onPress={() => this.showDateTimePicker('date')}
-                    style={WidgetStyles.dateTime.left}
-                    activeOpacity={0.8}
-                >
-                    <Text>{DateTimeWidget.toCalendarDate(new Date(this.state.value))}</Text>
-                </TouchableOpacity>
+                {
+                    this.hideDate ? '' :
+                        <TouchableOpacity
+                            onPress={() => this.showDateTimePicker('date')}
+                            style={WidgetStyles.dateTime.left}
+                            activeOpacity={0.8}
+                        >
+                            <Text>{DateTimeWidget.toCalendarDate(new Date(this.state.value))}</Text>
+                        </TouchableOpacity>
+                }
 
-                <TouchableOpacity
-                    onPress={() => this.showDateTimePicker('time')}
-                    style={WidgetStyles.dateTime.right}
-                    activeOpacity={0.8}
-                >
-                    <Text>{DateTimeWidget.toTime(new Date(this.state.value))} Uhr</Text>
-                </TouchableOpacity>
+
+                {
+                    this.hideTime ? '' :
+                        <TouchableOpacity
+                            onPress={() => this.showDateTimePicker('time')}
+                            style={WidgetStyles.dateTime.right}
+                            activeOpacity={0.8}
+                        >
+                            <Text>{DateTimeWidget.toTime(new Date(this.state.value))} Uhr</Text>
+                        </TouchableOpacity>
+                }
+
             </View>
         );
     }
