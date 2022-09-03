@@ -7,6 +7,7 @@ import {Colors} from "../styles/Variables";
 import ProtocolService from "../services/ProtocolService";
 import DateTimeWidget from "../components/DateTimeWidget";
 import {TextStyles} from "../styles/TextStyles";
+import EventSystem from "../services/EventSystem";
 
 
 export default class TimeListingScreen extends Screen {
@@ -19,7 +20,7 @@ export default class TimeListingScreen extends Screen {
         super(props);
 
         this.state.elements = ProtocolService.getInstance().getEntries();
-        ProtocolService.getInstance().getEmitter().addListener('initialized', this.refreshListing, this);
+        EventSystem.subscribe('initialized', this.refreshListing, this);
     }
 
     refreshListing() {

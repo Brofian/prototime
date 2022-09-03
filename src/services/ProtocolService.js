@@ -1,5 +1,5 @@
 import Storage from "../abstract/Storage";
-import {NativeEventEmitter} from "react-native";
+import EventSystem from "./EventSystem";
 
 const isDebug = false;
 
@@ -19,7 +19,6 @@ export default class ProtocolService {
 
 
     constructor() {
-        this.eventEmitter = new NativeEventEmitter();
         this.protocolStorage = new ProtocolStorage(this.onStorageChange.bind(this));
 
         this.entryCache = {};
@@ -31,7 +30,7 @@ export default class ProtocolService {
     onStorageChange() {
         this.isEntryCacheUpToDate = false;
         this.isDurationCacheUpToDate = false;
-        this.eventEmitter.emit('initialized');
+        EventSystem.publish('initialized');
     }
 
     /**
@@ -114,11 +113,6 @@ export default class ProtocolService {
         this.protocolStorage._clear();
         this.isEntryCacheUpToDate = false;
         this.isDurationCacheUpToDate = false;
-    }
-
-
-    getEmitter() {
-        return this.eventEmitter;
     }
 
 }

@@ -5,6 +5,7 @@ import CircularProgress from "react-native-circular-progress-indicator";
 import {Colors} from "../styles/Variables";
 import {TextStyles} from "../styles/TextStyles";
 import {ButtonStyles} from "../styles/ButtonStyles";
+import EventSystem from "../services/EventSystem";
 
 export default class MonthlyWorkloadWidget extends Component {
 
@@ -22,7 +23,7 @@ export default class MonthlyWorkloadWidget extends Component {
         this.monthsSinceBegin = this.monthDiff(this.measurementBeginning, new Date())+1;
         this.navigation = props.navigation;
 
-        ProtocolService.getInstance().getEmitter().addListener('initialized', this.onProtocolInitialized, this);
+        EventSystem.subscribe('initialized', this.onProtocolInitialized, this);
     }
 
     onProtocolInitialized() {
@@ -67,7 +68,7 @@ export default class MonthlyWorkloadWidget extends Component {
                         <CircularProgress
                             value={totalWorkMinutes}
                             initialValue={'0'}
-                            maxValue={totalWorkload+totalWorkMinutes}
+                            maxValue={Math.max(totalWorkload+totalWorkMinutes, totalWorkMinutes)}
                             radius={80}
                             duration={500+Math.random()*500}
                             progressValueColor={isTotalEndangered ? Colors.warning : Colors.primaryLight}
@@ -92,7 +93,7 @@ export default class MonthlyWorkloadWidget extends Component {
                         <CircularProgress
                             value={monthlyWorkMinutes}
                             initialValue={'0'}
-                            maxValue={monthlyWorkload+monthlyWorkMinutes}
+                            maxValue={Math.max(monthlyWorkload+monthlyWorkMinutes, monthlyWorkMinutes)}
                             radius={80}
                             duration={500+Math.random()*500}
                             progressValueColor={Colors.primaryLight}

@@ -5,9 +5,11 @@ import {ScreenStyles} from "../styles/ScreenStyles";
 import DateTimeWidget from "../components/DateTimeWidget";
 import {TableLayoutStyles} from "../styles/TableLayoutStyles";
 import {TextStyles} from "../styles/TextStyles";
-import {Colors} from "../styles/Variables";
-import NumericInput from "react-native-numeric-input";
 import NumberSelect from "../components/NumberSelect";
+import AlertHelper from "../services/AlertHelper";
+import DebugHelper from "../services/DebugHelper";
+import ProtocolService from "../services/ProtocolService";
+import {ButtonStyles} from "../styles/ButtonStyles";
 
 export default class ConfigScreen extends Screen {
 
@@ -33,7 +35,7 @@ export default class ConfigScreen extends Screen {
 
                     <View style={TableLayoutStyles.row}>
                         <View style={{ flex: 2 }}>
-                            <Text>Stunden pro Zeitabschnitt</Text>
+                            <Text style={TextStyles.default}>Stunden pro Zeitabschnitt</Text>
                         </View>
                         <View style={{ flex: 3, alignItems: 'center' }}>
                             <NumberSelect
@@ -50,7 +52,7 @@ export default class ConfigScreen extends Screen {
 
                     <View style={TableLayoutStyles.row}>
                         <View style={{ flex: 2 }}>
-                            <Text>Standard Minuten pro Pause</Text>
+                            <Text style={TextStyles.default}>Standard Minuten pro Pause</Text>
                         </View>
                         <View style={{ flex: 3, alignItems: 'center' }}>
                             <NumberSelect
@@ -68,7 +70,7 @@ export default class ConfigScreen extends Screen {
 
                     <View style={TableLayoutStyles.row}>
                         <View style={{ flex: 2 }}>
-                            <Text>Messungsbeginn</Text>
+                            <Text style={TextStyles.default}>Messungsbeginn</Text>
                         </View>
                         <View style={{ flex: 3, alignItems: 'center' }}>
                             <DateTimeWidget
@@ -84,27 +86,35 @@ export default class ConfigScreen extends Screen {
 
 
 
-                <View style={{ flex: 1 }}>
+                <View>
                     <Pressable
                         onPress={() => {
-                            Alert.alert(
+                            AlertHelper.confirm(
                                 'Wirklich löschen?',
                                 'Wenn du das tust, gehen alle deine Daten unwiederruflich verloren. Bist du dir sicher?',
-                                [
-                                    {
-                                        text: "Abbrechen",
-                                        style: "cancel",
-                                    },
-                                    {
-                                        text: "Löschen",
-                                        style: "confirm",
-                                        //onPress={() => ProtocolService.getInstance()._clear()}
-                                    },
-                                ],
+                                () => {
+                                    AlertHelper.confirm(
+                                        'Bist du sicher?',
+                                        'Das ist meine letzte Warnung. Es ist alles weg!',
+                                        () => ProtocolService.getInstance()._clear()
+                                    );
+                                }
                             );
                         }}
+                        style={ButtonStyles.secondary}
                     >
-                        <Text>Alle Daten löschen</Text>
+                        <Text style={TextStyles.default}>Alle Daten löschen</Text>
+                    </Pressable>
+                </View>
+
+                <View style={TextStyles.spacer.m} />
+
+                <View>
+                    <Pressable
+                        onPress={DebugHelper.createExampleEntry}
+                        style={ButtonStyles.secondary}
+                    >
+                        <Text style={TextStyles.default}>Debug Eintrag erstellen</Text>
                     </Pressable>
                 </View>
 
