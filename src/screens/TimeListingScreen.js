@@ -20,7 +20,7 @@ export default class TimeListingScreen extends Screen {
         super(props);
 
         this.state.elements = ProtocolService.getInstance().getEntries();
-        EventSystem.subscribe('initialized', this.refreshListing, this);
+        EventSystem.subscribe(ProtocolService.init, this.refreshListing, this);
     }
 
     refreshListing() {

@@ -1,6 +1,11 @@
 import Storage from "../abstract/Storage";
 import EventSystem from "./EventSystem";
 
+export const configEvents = {
+    configInitialized: 'configInitialized',
+    configChanged: 'configChanged'
+}
+
 export default class ConfigService {
 
     static instance = null;
@@ -17,6 +22,7 @@ export default class ConfigService {
 
     constructor() {
         this.configuration = {};
+        this.isInitialized = false;
         Storage.retrieve('config', this._onReloadConfig.bind(this));
     }
 
@@ -25,7 +31,11 @@ export default class ConfigService {
      * @private
      */
     _onStorageChange() {
-        EventSystem.publish('configChanged');
+        EventSystem.publish(configEvents.configChanged);
+    }
+
+    isReady() {
+        return this.isInitialized;
     }
 
     /**
@@ -36,7 +46,8 @@ export default class ConfigService {
     {
         if(success) {
             this.configuration = JSON.parse(item??'{}');
-            EventSystem.publish('configLoaded');
+            this.isInitialized = true;
+            EventSystem.publish(configEvents.configInitialized);
         }
     }
 
@@ -46,6 +57,7 @@ export default class ConfigService {
         }
         return fallback;
     }
+
 
     set(key, value) {
         this.configuration[key] = value;

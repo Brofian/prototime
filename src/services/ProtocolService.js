@@ -3,6 +3,11 @@ import EventSystem from "./EventSystem";
 
 const isDebug = false;
 
+export const protocolEvents = {
+    protocolInitialized: 'protocolInitialized',
+    protocolChanged: 'protocolChanged',
+}
+
 export default class ProtocolService {
 
     static instance = null;
@@ -19,18 +24,23 @@ export default class ProtocolService {
 
 
     constructor() {
-        this.protocolStorage = new ProtocolStorage(this.onStorageChange.bind(this));
+        this.protocolStorage = new ProtocolStorage(this.onStorageInitialized.bind(this));
 
         this.entryCache = {};
-        this.isEntryCacheUpToDate = false;
-        this.durationCache = 0;
-        this.isDurationCacheUpToDate = false;
     }
 
     onStorageChange() {
-        this.isEntryCacheUpToDate = false;
-        this.isDurationCacheUpToDate = false;
-        EventSystem.publish('initialized');
+        this.entryCache = null;
+        EventSystem.publish(protocolEvents.protocolChanged);
+    }
+
+    onStorageInitialized() {
+        this.entryCache = null;
+        EventSystem.publish(protocolEvents.protocolInitialized);
+    }
+
+    isReady() {
+        return this.protocolStorage.isReady();
     }
 
     /**
@@ -47,16 +57,7 @@ export default class ProtocolService {
             breakTime: breakTime
         };
         this.protocolStorage.add(entry);
-        this.isEntryCacheUpToDate = false;
-        this.isDurationCacheUpToDate = false;
-    }
-
-    /**
-     * @param {Date} startDate
-     * @param {int} duration
-     */
-    static getEndDate(startDate, duration) {
-        return new Date(startDate.getTime() + duration);
+        this.entryCache = null;
     }
 
     /**
@@ -65,7 +66,7 @@ export default class ProtocolService {
     getEntries() {
         let entries = [];
 
-        if (this.isEntryCacheUpToDate) {
+        if (this.entryCache) {
             return this.entryCache;
         }
 
@@ -87,32 +88,13 @@ export default class ProtocolService {
         });
 
         this.entryCache = entries;
-        this.isEntryCacheUpToDate = true;
 
         return entries;
     }
 
-    /**
-     * @returns {number}
-     */
-    getTotalDuration() {
-        if (this.isDurationCacheUpToDate) {
-            return this.durationCache;
-        }
-
-        let duration = this.getEntries().reduce((accumulator, object) => {
-            return accumulator + object.duration;
-        }, 0);
-
-        this.durationCache = duration;
-        this.isDurationCacheUpToDate = true;
-        return duration;
-    }
-
     _clear() {
         this.protocolStorage._clear();
-        this.isEntryCacheUpToDate = false;
-        this.isDurationCacheUpToDate = false;
+        this.entryCache = null;
     }
 
 }
@@ -193,6 +175,10 @@ class ProtocolStorage {
 
     getLoadingProgress() {
         return Math.max(1, this.length / this.desiredLength);
+    }
+
+    isReady() {
+        return this.isInitialized;
     }
 
     getData() {

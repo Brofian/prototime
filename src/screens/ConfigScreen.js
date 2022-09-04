@@ -11,7 +11,7 @@ import DebugHelper from "../services/DebugHelper";
 import ProtocolService from "../services/ProtocolService";
 import {ButtonStyles} from "../styles/ButtonStyles";
 import EventSystem from "../services/EventSystem";
-import ConfigService from "../services/ConfigService";
+import ConfigService, {configEvents} from "../services/ConfigService";
 
 export const defaultConfig = {
     timeUnit: 'month',
@@ -32,34 +32,36 @@ export default class ConfigScreen extends Screen {
 
     constructor(props) {
         super(props);
-        this.hasLoadedConfigOnce = false;
-        EventSystem.subscribe('configLoaded', this.updateConfig, this);
-        this.updateConfig(true);
+        this.saveTimeout = null;
+        EventSystem.subscribe(configEvents.configInitialized, this.updateConfig, this);
+        this.updateConfig();
     }
 
-    updateConfig(preMount = false) {
+    updateConfig() {
         let config = ConfigService.getInstance();
-        let newValues = {
+        this.setState({
             unit:                   config.get('timeUnit', defaultConfig.timeUnit),
             hoursPerUnit:           config.get('hoursPerTimeUnit', defaultConfig.hoursPerUnit),
             defaultBreakTime:       config.get('defaultBreakTime', defaultConfig.breakTime),
             startOfMeasurementMs:   config.get('startOfMeasurementMs', defaultConfig.startOfMeasurement),
-        };
-
-        if(preMount === true) {
-            this.state = newValues;
-        }
-        else {
-            this.setState(newValues);
-        }
-
-        this.hasLoadedConfigOnce = true;
+        });
     }
 
     onChange() {
-        if(!this.hasLoadedConfigOnce) {
-            return;
+        this.navigation.setOptions({
+            headerTitle: 'Einstellungen *'
+        })
+
+        if(this.saveTimeout) {
+            clearTimeout(this.saveTimeout);
         }
+        // give 500ms to the user for changing the config again, before saving
+        // this prevents the app from saving on every button press
+        this.saveTimeout = setTimeout(this.onSaveChanges.bind(this), 500);
+    }
+
+    onSaveChanges() {
+        this.saveTimeout = null;
 
         let config = ConfigService.getInstance();
         config.set('timeUnit', this.state.unit);
@@ -69,6 +71,9 @@ export default class ConfigScreen extends Screen {
 
         config.save();
         this.updateConfig();
+        this.navigation.setOptions({
+            headerTitle: 'Einstellungen'
+        })
     }
 
     render() {
@@ -136,10 +141,12 @@ export default class ConfigScreen extends Screen {
                             AlertHelper.confirm(
                                 'Wirklich löschen?',
                                 'Wenn du das tust, gehen alle deine Daten unwiederruflich verloren. Bist du dir sicher?',
+                                'Bestätigen',
                                 () => {
                                     AlertHelper.confirm(
                                         'Bist du sicher?',
                                         'Das ist meine letzte Warnung. Es ist alles weg!',
+                                        'Ich bin sicher!',
                                         () => ProtocolService.getInstance()._clear()
                                     );
                                 }
@@ -161,6 +168,7 @@ export default class ConfigScreen extends Screen {
                         <Text style={TextStyles.default}>Debug Eintrag erstellen</Text>
                     </Pressable>
                 </View>
+
 
             </View>
         );

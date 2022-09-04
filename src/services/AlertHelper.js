@@ -2,7 +2,7 @@ import {Alert} from "react-native";
 
 export default class AlertHelper {
 
-    static confirm(title, text, callback = null) {
+    static confirm(title, text, confirmText = "Bestätigen", callback = null) {
         Alert.alert(
             title,
             text,
@@ -12,7 +12,7 @@ export default class AlertHelper {
                     style: "cancel",
                 },
                 {
-                    text: "Löschen",
+                    text: confirmText,
                     style: "confirm",
                     onPress: callback
                 },

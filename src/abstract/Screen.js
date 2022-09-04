@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import {Component} from "react";
+import {TimelessStateComponent} from "./Component";
 
-export default class Screen extends Component {
+export default class Screen extends TimelessStateComponent {
 
     constructor(props) {
         super(props);
