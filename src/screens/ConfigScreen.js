@@ -12,6 +12,8 @@ import ProtocolService from "../services/ProtocolService";
 import {ButtonStyles} from "../styles/ButtonStyles";
 import EventSystem from "../services/EventSystem";
 import ConfigService, {configEvents} from "../services/ConfigService";
+import SelectComponent from "../components/SelectComponent";
+import {Colors} from "../styles/Variables";
 
 export const defaultConfig = {
     timeUnit: 'month',
@@ -20,6 +22,12 @@ export const defaultConfig = {
     startOfMeasurement: (new Date('2022/09/01')).getTime(),
 
 };
+
+const allowedUnits = [
+    {key:'week',   value:'Woche'},
+    {key:'month',  value:'Monat'},
+    {key:'year',   value:'Jahr'}
+];
 
 export default class ConfigScreen extends Screen {
 
@@ -76,12 +84,27 @@ export default class ConfigScreen extends Screen {
         })
     }
 
+    /**
+     * @param {string} key
+     */
+    getUnitByKey(key) {
+        for(let unit of allowedUnits) {
+            if(unit.key === key) {
+                return unit;
+            }
+        }
+        return null;
+    }
+
     render() {
         return (
             <View style={ScreenStyles.container}>
-                <StatusBar style="auto"/>
+                <StatusBar backgroundColor={Colors.gray700} barStyle="dark-content" />
+
 
                 <View style={{ flex: 1, flexDirection: 'column', alignContent: 'flex-start'}}>
+
+                    <View style={TextStyles.spacer.m} />
 
                     <View style={TableLayoutStyles.row}>
                         <View style={{ flex: 2 }}>
@@ -174,3 +197,19 @@ export default class ConfigScreen extends Screen {
         );
     };
 }
+
+/*
+
+<View style={TableLayoutStyles.row}>
+                        <View style={{ flex: 2 }}>
+                            <Text style={TextStyles.default}>Zeitabschnitt</Text>
+                        </View>
+                        <View style={{ flex: 3, alignItems: 'center' }}>
+                            <SelectComponent
+                                data={allowedUnits}
+                                default={this.getUnitByKey('week')}
+                            />
+                        </View>
+                    </View>
+
+ */

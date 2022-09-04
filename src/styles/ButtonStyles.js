@@ -21,6 +21,15 @@ export const ButtonStyles = StyleSheet.create({
             resizeMode:'contain'
         }
     },
+    config: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        height: 40,
+        fontSize: 15,
+        backgroundColor: Colors.primary,
+        borderRadius: 5,
+        textAlignVertical: 'center'
+    },
     primary: {
         paddingVertical: 10,
         paddingHorizontal: 20,

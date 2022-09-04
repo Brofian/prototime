@@ -9,7 +9,7 @@ export const TextStyles = StyleSheet.create({
       color: Colors.background
     },
     camouflage: {
-      color: Colors.gray300
+      color: Colors.gray500
     },
     spacer: {
         s: {

@@ -49,7 +49,7 @@ export default class HomeScreen extends Screen {
 
                 <View style={{flex: 2, justifyContent: 'flex-end'}}>
                     <Text style={TextStyles.default}>{this.state.monthsSinceBegin} Monat{this.state.monthsSinceBegin===1?'':'e'} seit Beginn</Text>
-                    <Text style={TextStyles.camouflage}>Prototime v0.2.5 (c) Fabian Holzwarth</Text>
+                    <Text style={TextStyles.camouflage}>Prototime v0.3.0 (c) Fabian Holzwarth</Text>
                 </View>
 
                 <ActionButton
