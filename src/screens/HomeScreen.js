@@ -81,7 +81,7 @@ export default class HomeScreen extends Screen {
                                     });
                                 }
                             }}
-                        ><Text style={TextStyles.camouflage}>Prototime v0.4.1 </Text></Pressable>
+                        ><Text style={TextStyles.camouflage}>Prototime v0.5.0 </Text></Pressable>
                         <Text style={TextStyles.camouflage}>&copy; 2022 Fabian Holzwarth</Text>
                     </View>
                 </View>
