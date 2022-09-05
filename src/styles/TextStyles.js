@@ -46,6 +46,14 @@ export const TextStyles = StyleSheet.create({
     hasError: {
         color: Colors.red,
         fontWeight: "600"
+    },
+    icon: {
+        flex: 1,
+        height: 16,
+        width: 16,
+        resizeMode:'contain',
+        tintColor: Colors.text
     }
-
 });
+
+export const TS = TextStyles;

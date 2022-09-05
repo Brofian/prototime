@@ -48,7 +48,7 @@ export default class TimeListingScreen extends Screen {
                 </Text>
                 {!breakTime     ? '' : <Text style={TextStyles.default}>Zzgl. {breakTime} Minuten Pause</Text>}
                 {!comment       ? '' : <Text style={TextStyles.default}>{comment}</Text>}
-                <View style={TextStyles.spacer.m} />
+                <View style={TextStyles.spacer.l} />
             </View>
         );
     }
@@ -56,7 +56,7 @@ export default class TimeListingScreen extends Screen {
     render() {
         return (
             <View style={ScreenStyles.container}>
-                <StatusBar style="auto"/>
+                <StatusBar backgroundColor={Colors.background} style="light" />
 
                 <FlatList
                     data={this.state.elements}

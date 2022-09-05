@@ -34,12 +34,14 @@ export const ButtonStyles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         backgroundColor: Colors.primary,
-        borderRadius: 30
+        borderRadius: 30,
+        textAlign: 'center'
     },
     secondary: {
         paddingVertical: 10,
         paddingHorizontal: 20,
         backgroundColor: Colors.gray300,
-        borderRadius: 30
+        borderRadius: 30,
+        alignItems: 'center'
     }
 });

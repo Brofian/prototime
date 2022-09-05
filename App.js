@@ -11,6 +11,7 @@ import ProtocolService, {InitEventName, protocolEvents} from "./src/services/Pro
 import EventSystem from "./src/services/EventSystem";
 import {TimelessStateComponent} from "./src/abstract/Component";
 import LoadingWidget from "./src/components/LoadingWidget";
+import ImageService from "./src/services/ImageService";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ export default class App extends TimelessStateComponent {
 
         ConfigService.getInstance();
         ProtocolService.getInstance();
+        ImageService.getInstance();
     }
 
     onConfigInitialized() {

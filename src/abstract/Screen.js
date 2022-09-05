@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import {TimelessStateComponent} from "./Component";
+import {ScreenStyles} from "../styles/ScreenStyles";
+import {Colors} from "../styles/Variables";
 
 export default class Screen extends TimelessStateComponent {
 
@@ -15,18 +17,11 @@ export default class Screen extends TimelessStateComponent {
 
     render() {
         return (
-            <View style={styles.container}>
-                <Text>TODO: override the render method!</Text>
+            <View>
+                <StatusBar backgroundColor={Colors.background} style="light" />
+
+                <Text>TODO: override the render() method!</Text>
             </View>
         );
     };
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

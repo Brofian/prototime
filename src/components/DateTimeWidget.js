@@ -54,7 +54,7 @@ export default class DateTimeWidget extends Component {
 
             if(this.hideTime || this.hideDate) {
                 current = new Date(0);
-                current.setUTCHours(12);
+                current.setHours(5);
             }
             else {
                 current = new Date(this.state.value);

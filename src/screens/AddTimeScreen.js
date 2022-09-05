@@ -10,7 +10,8 @@ import ProtocolService from "../services/ProtocolService";
 import {Colors} from "../styles/Variables";
 import NumberSelect from "../components/NumberSelect";
 import ConfigService from "../services/ConfigService";
-import {defaultConfig} from "./ConfigScreen";
+import {defaultConfig} from "../services/ConfigService";
+import Container from "@react-navigation/native-stack/src/views/DebugContainer.native";
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
@@ -76,6 +77,8 @@ export default class AddTimeScreen extends Screen {
     render() {
         return (
             <View style={ScreenStyles.container}>
+                <StatusBar backgroundColor={Colors.background} style="light" />
+
 
                 <Text style={[TextStyles.header.minor, TextStyles.default]}>Füge einen neuen Eintrag hinzu</Text>
 
@@ -160,6 +163,4 @@ export default class AddTimeScreen extends Screen {
             </View>
         );
     };
-
-
 }

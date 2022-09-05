@@ -4,11 +4,13 @@ import Screen from "../abstract/Screen";
 import {ScreenStyles} from "../styles/ScreenStyles";
 import ActionButton from "../components/ActionButton";
 import {Colors} from "../styles/Variables";
-import MonthlyWorkloadWidget from "../components/MonthlyWorkloadWidget";
+import WorkloadWidget, {unitNames} from "../components/WorkloadWidget";
 import {ButtonStyles} from "../styles/ButtonStyles";
 import {TextStyles} from "../styles/TextStyles";
 import EventSystem from "../services/EventSystem";
-import {configEvents} from "../services/ConfigService";
+import ConfigService, {configEvents} from "../services/ConfigService";
+import {defaultConfig} from "../services/ConfigService";
+import TimeCalculations from "../services/TimeCalculations";
 
 export default class HomeScreen extends Screen {
 
@@ -20,8 +22,11 @@ export default class HomeScreen extends Screen {
     }
 
     onConfigChange() {
+        let timeUnit = ConfigService.getInstance().get('timeUnit', defaultConfig.timeUnit);
+
         this.setState({
-            monthsSinceBegin: MonthlyWorkloadWidget.getMonthsSinceBegin()
+            unit: timeUnit,
+            unitsSinceBegin: WorkloadWidget.getUnitsSinceBegin(timeUnit)
         });
     }
 
@@ -29,10 +34,11 @@ export default class HomeScreen extends Screen {
     render() {
         return (
             <View style={ScreenStyles.container}>
-                <StatusBar style="auto"/>
+                <StatusBar backgroundColor={Colors.background} style="light" />
+
 
                 <View style={{ flex: 4, width: '100%'}}>
-                    <MonthlyWorkloadWidget
+                    <WorkloadWidget
                         navigation={this.navigation}
                     />
                 </View>
@@ -48,8 +54,8 @@ export default class HomeScreen extends Screen {
                 </View>
 
                 <View style={{flex: 2, justifyContent: 'flex-end'}}>
-                    <Text style={TextStyles.default}>{this.state.monthsSinceBegin} Monat{this.state.monthsSinceBegin===1?'':'e'} seit Beginn</Text>
-                    <Text style={TextStyles.camouflage}>Prototime v0.3.0 (c) Fabian Holzwarth</Text>
+                    <Text style={TextStyles.default}>{this.state.unitsSinceBegin} {this.state.unitsSinceBegin===1?  unitNames[this.state.unit].s:unitNames[this.state.unit].p  } seit Beginn</Text>
+                    <Text style={TextStyles.camouflage}>Prototime v0.3.0 &copy; 2022 Fabian Holzwarth</Text>
                 </View>
 
                 <ActionButton
