@@ -19,6 +19,10 @@ export default class HomeScreen extends Screen {
 
         EventSystem.subscribe(configEvents.configChanged, this.onConfigChange, this);
         this.onConfigChange();
+        this.setState({
+            isDebugMode: false,
+            debugCounter: 4 // fifth tap will activate debug mode
+        });
     }
 
     onConfigChange() {
@@ -46,7 +50,7 @@ export default class HomeScreen extends Screen {
 
                 <View style={{flex: 3, alignSelf: 'stretch', alignItems: 'center' }}>
                     <Pressable
-                        onPress={() => this.navigation.navigate('Config')}
+                        onPress={() => this.navigation.navigate('Config', {debugMode: this.state.debugMode})}
                         style={ButtonStyles.secondary}
                     >
                         <Text style={TextStyles.default}>Konfiguration</Text>
@@ -55,7 +59,23 @@ export default class HomeScreen extends Screen {
 
                 <View style={{flex: 2, justifyContent: 'flex-end'}}>
                     <Text style={TextStyles.default}>{this.state.unitsSinceBegin} {this.state.unitsSinceBegin===1?  unitNames[this.state.unit].s:unitNames[this.state.unit].p  } seit Beginn</Text>
-                    <Text style={TextStyles.camouflage}>Prototime v0.3.0 &copy; 2022 Fabian Holzwarth</Text>
+                    <View style={{flexDirection: 'row'}}>
+                        <Pressable
+                            onPress={() => {
+                                if(this.state.debugCounter <= 0) {
+                                    this.setState({
+                                        debugMode: true
+                                    });
+                                }
+                                else {
+                                    this.setState({
+                                        debugCounter: this.state.debugCounter-1
+                                    });
+                                }
+                            }}
+                        ><Text style={TextStyles.camouflage}>Prototime v0.3.0 </Text></Pressable>
+                        <Text style={TextStyles.camouflage}>&copy; 2022 Fabian Holzwarth</Text>
+                    </View>
                 </View>
 
                 <ActionButton

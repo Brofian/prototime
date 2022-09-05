@@ -60,6 +60,18 @@ export default class ProtocolService {
         this.entryCache = null;
     }
 
+    updateEntry(key, startTime, duration, comment = null, breakTime = 0) {
+        let entry = {
+            start: startTime,
+            duration: duration,
+            comment: comment,
+            breakTime: breakTime
+        };
+        this.protocolStorage.set(entry, key.substring(5), true);
+        this.entryCache = null;
+    }
+
+
     /**
      * @returns {Object}
      */
@@ -163,11 +175,12 @@ class ProtocolStorage {
         this._save();
     }
 
-    set(obj, id) {
+    set(obj, id, onlyIfExists = false) {
         if (id >= 0 && id < this.length) {
             ProtocolStorage.storage['item_' + id] = obj;
+            this._save();
             return id;
-        } else {
+        } else if(onlyIfExists) {
             this.add(obj);
             return this.length;
         }

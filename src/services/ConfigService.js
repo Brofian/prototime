@@ -77,4 +77,13 @@ export default class ConfigService {
     save() {
         Storage.store('config', JSON.stringify(this.configuration));
     }
+
+    /**
+     * @internal
+     * @private
+     */
+    _clear() {
+        this.configuration = {};
+        this.save();
+    }
 }

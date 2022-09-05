@@ -11,14 +11,13 @@ import {Colors} from "../styles/Variables";
 import NumberSelect from "../components/NumberSelect";
 import ConfigService from "../services/ConfigService";
 import {defaultConfig} from "../services/ConfigService";
-import Container from "@react-navigation/native-stack/src/views/DebugContainer.native";
+
 
 LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
 ]);
 
 export default class AddTimeScreen extends Screen {
-
 
     state = {
         start: (new Date()).getTime(),
@@ -32,8 +31,9 @@ export default class AddTimeScreen extends Screen {
 
     constructor(props) {
         super(props);
-        this.defaultBreak = 0;
-        this.state.break = this.defaultBreak;
+        this.state.break = ConfigService.getInstance().get('defaultBreakTime', defaultConfig.breakTime);;
+        this.state.breakDefault = ConfigService.getInstance().get('defaultBreakTime', defaultConfig.breakTime);;
+        this.title = 'Füge einen neuen Eintrag hinzu';
     }
 
 
@@ -80,7 +80,7 @@ export default class AddTimeScreen extends Screen {
                 <StatusBar backgroundColor={Colors.background} style="light" />
 
 
-                <Text style={[TextStyles.header.minor, TextStyles.default]}>Füge einen neuen Eintrag hinzu</Text>
+                <Text style={[TextStyles.header.minor, TextStyles.default]}>{this.title}</Text>
 
                 <View style={TextStyles.spacer.xl}></View>
 
@@ -118,7 +118,7 @@ export default class AddTimeScreen extends Screen {
 
                 <View style={TableLayoutStyles.row}>
                     <View style={{ flex: 1 }}>
-                        <Text style={TextStyles.default}>Pause (min): </Text>
+                        <Text style={TextStyles.default}>Pause (Min): </Text>
                     </View>
 
                     <View style={{ flex: 2, alignItems: 'flex-start' }}>
@@ -126,7 +126,7 @@ export default class AddTimeScreen extends Screen {
                             onChange={value => this.setState({break: parseInt(value??'0')})}
                             min={0}
                             max={600}
-                            initial={ConfigService.getInstance().get('defaultBreakTime', defaultConfig.breakTime)}
+                            initial={this.state.breakDefault}
                         />
                     </View>
                 </View>

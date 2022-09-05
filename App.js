@@ -12,6 +12,7 @@ import EventSystem from "./src/services/EventSystem";
 import {TimelessStateComponent} from "./src/abstract/Component";
 import LoadingWidget from "./src/components/LoadingWidget";
 import ImageService from "./src/services/ImageService";
+import EditTimeScreen from "./src/screens/EditTimeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -106,6 +107,13 @@ export default class App extends TimelessStateComponent {
                         component={AddTimeScreen}
                         options={{
                             title: "Erstellen"
+                        }}
+                    />
+                    <Stack.Screen
+                        name="EditTime"
+                        component={EditTimeScreen}
+                        options={{
+                            title: "Ändern"
                         }}
                     />
                     <Stack.Screen

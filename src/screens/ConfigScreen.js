@@ -245,7 +245,7 @@ export default class ConfigScreen extends Screen {
 
                 </Layout>
 
-                <View>
+                <View style={{ display: (this.route.params.debugMode) ? 'flex' : 'none' }}>
                     <Pressable
                         onPress={() => {
                             AlertHelper.confirm(
@@ -265,6 +265,29 @@ export default class ConfigScreen extends Screen {
                         style={ButtonStyles.secondary}
                     >
                         <Text style={TextStyles.default}>Alle Daten löschen</Text>
+                    </Pressable>
+
+                    <View style={TextStyles.spacer.m}/>
+
+                    <Pressable
+                        onPress={() => {
+                            AlertHelper.confirm(
+                                'Wirklich zurücksetzen?',
+                                'Wenn du das tust, gehen alle deine Einstellungen unwiederruflich verloren. Bist du dir sicher?',
+                                'Bestätigen',
+                                () => {
+                                    AlertHelper.confirm(
+                                        'Bist du sicher?',
+                                        'Das ist meine letzte Warnung. Es ist alles auf Anfang!',
+                                        'Ich bin sicher!',
+                                        () => ConfigService.getInstance()._clear()
+                                    );
+                                }
+                            );
+                        }}
+                        style={ButtonStyles.secondary}
+                    >
+                        <Text style={TextStyles.default}>Einstellungen zurücksetzen</Text>
                     </Pressable>
 
                     <View style={TextStyles.spacer.m}/>
