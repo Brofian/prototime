@@ -10,7 +10,6 @@ import {TextStyles} from "../styles/TextStyles";
 import EventSystem from "../services/EventSystem";
 import ConfigService, {configEvents} from "../services/ConfigService";
 import {defaultConfig} from "../services/ConfigService";
-import TimeCalculations from "../services/TimeCalculations";
 
 export default class HomeScreen extends Screen {
 
@@ -73,7 +72,7 @@ export default class HomeScreen extends Screen {
                                     });
                                 }
                             }}
-                        ><Text style={TextStyles.camouflage}>Prototime v0.3.0 </Text></Pressable>
+                        ><Text style={TextStyles.camouflage}>Prototime v0.4.0 </Text></Pressable>
                         <Text style={TextStyles.camouflage}>&copy; 2022 Fabian Holzwarth</Text>
                     </View>
                 </View>

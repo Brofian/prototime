@@ -280,7 +280,7 @@ export default class ConfigScreen extends Screen {
                                         'Bist du sicher?',
                                         'Das ist meine letzte Warnung. Es ist alles auf Anfang!',
                                         'Ich bin sicher!',
-                                        () => ConfigService.getInstance()._clear()
+                                        () => ConfigService.getInstance()._clear(this.updateConfig.bind(this))
                                     );
                                 }
                             );

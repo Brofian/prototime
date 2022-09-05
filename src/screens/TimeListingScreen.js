@@ -58,7 +58,9 @@ export default class TimeListingScreen extends Screen {
         return (
             <TouchableWithoutFeedback
                 onLongPress={this.onItemSelect.bind(this, item)}
-                onPressIn={() => this.setState({hoveredIndex: key})}
+                onPressIn={() => {
+                    this.setState({hoveredIndex: isHovered ? -1 : key})
+                }}
             >
                 <View style={{
                     backgroundColor:    isHovered ? Colors.gray300 : Colors.transparent,

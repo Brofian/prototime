@@ -74,16 +74,16 @@ export default class ConfigService {
         this._onStorageChange();
     }
 
-    save() {
-        Storage.store('config', JSON.stringify(this.configuration));
+    save(callback = null) {
+        Storage.store('config', JSON.stringify(this.configuration), callback);
     }
 
     /**
      * @internal
      * @private
      */
-    _clear() {
+    _clear(callback) {
         this.configuration = {};
-        this.save();
+        this.save(callback);
     }
 }
