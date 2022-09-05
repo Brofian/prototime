@@ -13,35 +13,31 @@ export default class SelectComponent extends TimelessStateComponent {
         }
     }
 
-    renderButton(selectedItem, index) {
-        return (
-            <View style={ButtonStyles.config}>
-                <Text>{selectedItem ? selectedItem.value : 'Auswählen'}</Text>
-            </View>
-        );
-    }
-
     render() {
         return (
-            <SelectDropdown
-                data={this.props.data}
-                onSelect={this.onChange.bind(this)}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                    return selectedItem.value;
-                }}
-                rowTextForSelection={(item, index) => {
-                    return item.value;
-                }}
-                defaultValue={this.props.default}
-                //renderCustomizedButtonChild={this.renderButton}
-                dropdownStyle={{
-                    backgroundColor: Colors.white,
-                }}
-                buttonStyle={{
-                    backgroundColor: Colors.transparent
-                }}
-                buttonTextStyle={ButtonStyles.config}
-            />
+            <View style={{overflow: 'hidden'}}>
+                <SelectDropdown
+                    data={this.props.data}
+                    onSelect={this.onChange.bind(this)}
+                    buttonTextAfterSelection={(selectedItem, index) => {
+                        return selectedItem.value;
+                    }}
+                    rowTextForSelection={(item, index) => {
+                        return item.value;
+                    }}
+                    defaultValue={this.props.default}
+                    //renderCustomizedButtonChild={this.renderButton}
+                    dropdownStyle={{
+                        backgroundColor: Colors.white,
+                    }}
+                    buttonStyle={{
+                        backgroundColor: Colors.transparent,
+                        //paddingHorizontal: 25
+                        width: 153
+                    }}
+                    buttonTextStyle={ButtonStyles.config}
+                />
+            </View>
         );
     }
 

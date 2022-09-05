@@ -109,7 +109,7 @@ export default class ConfigScreen extends Screen {
                     <View style={TextStyles.spacer.m}/>
 
                     <Row>
-                        <Column size={4}>
+                        <Column size={5}>
                             <Text style={TextStyles.default}>Zeitabschnitt</Text>
                         </Column>
                         <Column size={1}>
@@ -118,7 +118,7 @@ export default class ConfigScreen extends Screen {
                                 onPress={() => this.setState({ currentModal: 'timeUnit'})}
                             />
                         </Column>
-                        <Column size={5} vAlign={'center'}>
+                        <Column size={4} vAlign={'center'}>
                             <SelectComponent
                                 data={allowedUnits}
                                 default={this.getUnitByKey(this.state.unit)}
@@ -132,7 +132,7 @@ export default class ConfigScreen extends Screen {
                     <View style={TextStyles.spacer.l}/>
 
                     <Row>
-                        <Column size={4}>
+                        <Column size={5}>
                             <Text style={TextStyles.default}>Stunden pro Zeitabschnitt</Text>
                         </Column>
                         <Column size={1}>
@@ -141,7 +141,7 @@ export default class ConfigScreen extends Screen {
                                 onPress={() => this.setState({ currentModal: 'hoursPerUnit'})}
                             />
                         </Column>
-                        <Column size={5} vAlign={'center'}>
+                        <Column size={4} vAlign={'center'}>
                             <NumberSelect
                                 onChange={value => {
                                     this.setState({hoursPerUnit: parseInt(value ?? '0')}, this.onChange.bind(this));
@@ -155,7 +155,7 @@ export default class ConfigScreen extends Screen {
                     <View style={TextStyles.spacer.l}/>
 
                     <Row>
-                        <Column size={4}>
+                        <Column size={5}>
                             <Text style={TextStyles.default}>Stunden für Rückstands-Warnung</Text>
                         </Column>
                         <Column size={1}>
@@ -164,7 +164,7 @@ export default class ConfigScreen extends Screen {
                                 onPress={() => this.setState({ currentModal: 'backlogThreshold'})}
                             />
                         </Column>
-                        <Column size={5} vAlign={'center'}>
+                        <Column size={4} vAlign={'center'}>
                             <NumberSelect
                                 onChange={value => {
                                     this.setState({backlogThreshold: parseInt(value ?? '0')}, this.onChange.bind(this));
@@ -177,7 +177,7 @@ export default class ConfigScreen extends Screen {
                     <View style={TextStyles.spacer.l}/>
 
                     <Row>
-                        <Column size={4}>
+                        <Column size={5}>
                             <Text style={TextStyles.default}>Standard Minuten pro Pause</Text>
                         </Column>
                         <Column size={1}>
@@ -186,7 +186,7 @@ export default class ConfigScreen extends Screen {
                                 onPress={() => this.setState({ currentModal: 'defaultBreakTime'})}
                             />
                         </Column>
-                        <Column size={5} vAlign={'center'}>
+                        <Column size={4} vAlign={'center'}>
                             <NumberSelect
                                 onChange={value => {
                                     this.setState({defaultBreakTime: parseInt(value ?? '0')}, this.onChange.bind(this));
@@ -201,7 +201,7 @@ export default class ConfigScreen extends Screen {
                     <View style={TextStyles.spacer.l}/>
 
                     <Row>
-                        <Column size={4}>
+                        <Column size={5}>
                             <Text style={TextStyles.default}>Messungsbeginn</Text>
                         </Column>
                         <Column size={1}>
@@ -210,7 +210,7 @@ export default class ConfigScreen extends Screen {
                                 onPress={() => this.setState({ currentModal: 'startOfMeasurementMs'})}
                             />
                         </Column>
-                        <Column size={5} vAlign={'center'}>
+                        <Column size={4} vAlign={'center'}>
                             <DateTimeWidget
                                 value={this.state.startOfMeasurementMs}
                                 hideTime={true}
@@ -224,7 +224,7 @@ export default class ConfigScreen extends Screen {
                     <View style={TextStyles.spacer.l}/>
 
                     <Row>
-                        <Column size={4}>
+                        <Column size={5}>
                             <Text style={TextStyles.default}>Stunden zur Messbeginn Kalibrierung</Text>
                         </Column>
                         <Column size={1}>
@@ -233,7 +233,7 @@ export default class ConfigScreen extends Screen {
                                 onPress={() => this.setState({ currentModal: 'ignoredHoursInUnitBeforeStart'})}
                             />
                         </Column>
-                        <Column size={5} vAlign={'center'}>
+                        <Column size={4} vAlign={'center'}>
                             <NumberSelect
                                 onChange={value => {
                                     this.setState({ignoredHoursInUnitBeforeStart: parseInt(value ?? '0')}, this.onChange.bind(this));
@@ -358,7 +358,7 @@ export default class ConfigScreen extends Screen {
                     isVisible={this.state.currentModal === 'startOfMeasurementMs'}
                     onCloseBtnPressed={() => this.setState({currentModal: null})}
                 >
-                    <Text style={[TS.header.minor, TS.default]}>Messungsbeginns</Text>
+                    <Text style={[TS.header.minor, TS.default]}>Messungsbeginn</Text>
                     <View style={TS.spacer.m}/>
                     <Text style={TS.default}>Mit dieser Einstellung wird der Startzeitpunkt der Messung festgelegt. Dabei gilt dieser Tag bereits als die erste Messeinheit.</Text>
                     <View style={TS.spacer.m}/>

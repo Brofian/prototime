@@ -58,6 +58,7 @@ export default class ProtocolService {
         };
         this.protocolStorage.add(entry);
         this.entryCache = null;
+        this.onStorageChange();
     }
 
     updateEntry(key, startTime, duration, comment = null, breakTime = 0) {
@@ -69,8 +70,14 @@ export default class ProtocolService {
         };
         this.protocolStorage.set(entry, key.substring(5), true);
         this.entryCache = null;
+        this.onStorageChange();
     }
 
+    deleteEntry(key, callback = null) {
+        this.protocolStorage.set(null, key.substring(5), true);
+        this.entryCache = null;
+        this.onStorageChange();
+    }
 
     /**
      * @returns {Object}
@@ -84,7 +91,7 @@ export default class ProtocolService {
 
         let datasets = this.protocolStorage.getData();
         for (let key in datasets) {
-            if (datasets.hasOwnProperty(key)) {
+            if (datasets.hasOwnProperty(key) && datasets[key]) {
                 entries.push({
                     start: datasets[key].start,
                     duration: datasets[key].duration,
@@ -121,6 +128,10 @@ class ProtocolStorage {
         this.desiredLength = 0;
         this.length = 0;
         this.debugLog('constructor', 'now retrieving length');
+        this._reload();
+    }
+
+    _reload() {
         Storage.retrieve('length', this._load.bind(this));
     }
 
@@ -146,6 +157,7 @@ class ProtocolStorage {
     _load(success, key, item) {
         if (success && item) {
             if (key === 'length') {
+                ProtocolStorage.storage = {};
                 this.desiredLength = parseInt(item??"0");
                 this.debugLog('_load', 'loaded length of ' + this.desiredLength + '. Now retrieving items');
                 for (let i = 0; i < this.desiredLength; i++) {
@@ -177,12 +189,17 @@ class ProtocolStorage {
 
     set(obj, id, onlyIfExists = false) {
         if (id >= 0 && id < this.length) {
+            this.debugLog('set', 'setting ' + JSON.stringify(obj) + ' as ' + 'item_' + id);
             ProtocolStorage.storage['item_' + id] = obj;
             this._save();
             return id;
         } else if(onlyIfExists) {
             this.add(obj);
             return this.length;
+        }
+        else {
+            this.debugLog('set', 'skipping item_' + id + ', as it does not exist');
+
         }
     }
 
@@ -195,7 +212,7 @@ class ProtocolStorage {
     }
 
     getData() {
-        return ProtocolStorage.storage;
+        return {...ProtocolStorage.storage};
     }
 
     debugLog(method, text) {

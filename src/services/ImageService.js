@@ -18,6 +18,7 @@ export default class ImageService {
                 list: require('../assets/icons/list.png'),
                 plus: require('../assets/icons/plus.png'),
                 question: require('../assets/icons/question.png'),
+                bin: require('../assets/icons/bin.png'),
             },
             images: {
                 logo: require('../assets/PrototimeLogo.png')

@@ -12,6 +12,9 @@ export const TextStyles = StyleSheet.create({
       color: Colors.gray500
     },
     spacer: {
+        xs: {
+            height: 2
+        },
         s: {
             height: 5
         },

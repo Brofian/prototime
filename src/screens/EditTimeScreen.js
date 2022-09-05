@@ -12,6 +12,9 @@ import NumberSelect from "../components/NumberSelect";
 import ConfigService from "../services/ConfigService";
 import {defaultConfig} from "../services/ConfigService";
 import AddTimeScreen from "./AddTimeScreen";
+import ActionButton from "../components/ActionButton";
+import AlertHelper from "../services/AlertHelper";
+import ImageService from "../services/ImageService";
 
 
 LogBox.ignoreLogs([
@@ -35,6 +38,19 @@ export default class EditTimeScreen extends AddTimeScreen {
         });
     }
 
+
+    onDelete() {
+        try {
+            ProtocolService.getInstance().deleteEntry(this.route.params.item.key);
+            this.route.params.onGoBack();
+            this.navigation.goBack(null);
+        }
+        catch (err) {
+            this.setState({
+               error: err.toString()
+            });
+        }
+    }
 
     onSave() {
         let duration = this.state.end - this.state.start - (this.state.break*1000*60);
@@ -71,6 +87,36 @@ export default class EditTimeScreen extends AddTimeScreen {
 
     getCurrentStart() {
         return this.state.start;
+    }
+
+    render() {
+        return (
+            <View style={{flex: 1}}>
+                {super.render()}
+
+                <ActionButton
+                    color={Colors.warning}
+                    background={Colors.red}
+                    src={ImageService.getInstance().getIcon('bin')}
+                    onPress={
+                        () => AlertHelper.confirm(
+                            'Wirklich löschen?',
+                            'Wenn du das tust, geht der Eintrag unwiederruflich verloren. Bist du dir sicher, dass du löschen möchtest?',
+                            'Bestätigen',
+                            () => {
+                                AlertHelper.confirm(
+                                    'Bist du sicher?',
+                                    'Das ist meine letzte Warnung. Er wird für immer weg sein!',
+                                    'Ich bin sicher!',
+                                    this.onDelete.bind(this)
+                                );
+                            }
+                        )
+                    }
+                />
+
+            </View>
+        );
     }
 
 }

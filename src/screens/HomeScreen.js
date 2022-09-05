@@ -39,7 +39,6 @@ export default class HomeScreen extends Screen {
             <View style={ScreenStyles.container}>
                 <StatusBar backgroundColor={Colors.background} style="light" />
 
-
                 <View style={{ flex: 4, width: '100%'}}>
                     <WorkloadWidget
                         navigation={this.navigation}
@@ -53,6 +52,16 @@ export default class HomeScreen extends Screen {
                         style={ButtonStyles.secondary}
                     >
                         <Text style={TextStyles.default}>Konfiguration</Text>
+                    </Pressable>
+
+                    <View style={TextStyles.spacer.m} />
+                    <View style={TextStyles.spacer.xs} />
+
+                    <Pressable
+                        onPress={() => this.navigation.navigate('TimeListing')}
+                        style={ButtonStyles.secondary}
+                    >
+                        <Text style={[TextStyles.default, {width: 83, textAlign: 'center'}]}>Protokoll</Text>
                     </Pressable>
                 </View>
 
@@ -72,20 +81,10 @@ export default class HomeScreen extends Screen {
                                     });
                                 }
                             }}
-                        ><Text style={TextStyles.camouflage}>Prototime v0.4.0 </Text></Pressable>
+                        ><Text style={TextStyles.camouflage}>Prototime v0.4.1 </Text></Pressable>
                         <Text style={TextStyles.camouflage}>&copy; 2022 Fabian Holzwarth</Text>
                     </View>
                 </View>
-
-                <ActionButton
-                    src={require('../assets/icons/list.png')}
-                    color={Colors.primary}
-                    background={Colors.primaryDark}
-                    onPress={() => {
-                        this.navigation.navigate('TimeListing')
-                    }}
-                    size={20}
-                />
 
             </View>
         );

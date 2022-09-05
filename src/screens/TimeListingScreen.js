@@ -4,7 +4,7 @@ import {ScreenStyles} from "../styles/ScreenStyles";
 import {FlatList, Pressable, Text, TouchableWithoutFeedback, View} from "react-native";
 import ActionButton from "../components/ActionButton";
 import {Colors} from "../styles/Variables";
-import ProtocolService from "../services/ProtocolService";
+import ProtocolService, {protocolEvents} from "../services/ProtocolService";
 import DateTimeWidget from "../components/DateTimeWidget";
 import {TextStyles} from "../styles/TextStyles";
 import EventSystem from "../services/EventSystem";
@@ -21,8 +21,8 @@ export default class TimeListingScreen extends Screen {
     constructor(props) {
         super(props);
 
-        this.state.elements = ProtocolService.getInstance().getEntries();
-        EventSystem.subscribe(ProtocolService.init, this.refreshListing, this);
+        EventSystem.subscribe(protocolEvents.protocolChanged, this.refreshListing, this);
+        this.refreshListing();
     }
 
     refreshListing() {
@@ -99,14 +99,11 @@ export default class TimeListingScreen extends Screen {
 
                 <ActionButton
                     src={require('../assets/icons/plus.png')}
-                    color={Colors.primary}
-                    background={Colors.primaryDark}
                     onPress={() => {
                         this.navigation.navigate('AddTime', {
                             onGoBack: this.refreshListing.bind((this))
                         })
                     }}
-                    size={20}
                 />
 
             </View>

@@ -11,7 +11,7 @@ export const defaultConfig = {
     hoursPerUnit: 40,
     breakTime: 0,
     startOfMeasurement: (new Date('2022/09/01')).getTime(),
-    backlogThreshold: 20,
+    backlogThreshold: 40,
     ignoredHoursInUnitBeforeStart: 0
 };
 
