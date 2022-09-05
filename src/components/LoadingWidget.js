@@ -1,7 +1,7 @@
 import {Component} from "react";
-import {Text, View} from "react-native";
-import {ScreenStyles} from "../styles/ScreenStyles";
+import {Image, Text, View} from "react-native";
 import {TextStyles} from "../styles/TextStyles";
+import ImageService from "../services/ImageService";
 
 export default class LoadingWidget extends Component {
 
@@ -12,6 +12,15 @@ export default class LoadingWidget extends Component {
                 justifyContent: "center",
                 alignItems: "center"
             }}>
+                <Image
+                    source={ImageService.getInstance().getImage('logo')}
+                    style={{
+                        width: '80%',
+                        resizeMode: 'contain',
+                        height: 300,
+                        opacity: 0.2
+                    }}
+                />
                 <Text style={TextStyles.default}>Loading</Text>
             </View>
         );

@@ -15,6 +15,12 @@ import ImageService from "./src/services/ImageService";
 
 const Stack = createNativeStackNavigator();
 
+const forFade = ({ current }) => ({
+    cardStyle: {
+        opacity: current.progress,
+    },
+});
+
 export default class App extends TimelessStateComponent {
 
     constructor(props) {

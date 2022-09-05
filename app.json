@@ -5,10 +5,14 @@
     "description": "A tool for documenting time and keeping an eye on your workload",
     "orientation": "portrait",
     "android": {
-      "package": "de.fabianholzwarth.prototime"
+      "package": "de.fabianholzwarth.prototime",
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/PrototimeLogo.png",
+        "backgroundImage": "./src/assets/PrototimeLogoBackground.png"
+      }
     },
     "userInterfaceStyle": "automatic",
     "sdkVersion": "46.0.0",
-    "version": "0.3.0"
+    "version": "0.3.5"
   }
 }

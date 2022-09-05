@@ -18,11 +18,18 @@ export default class ImageService {
                 list: require('../assets/icons/list.png'),
                 plus: require('../assets/icons/plus.png'),
                 question: require('../assets/icons/question.png'),
+            },
+            images: {
+                logo: require('../assets/PrototimeLogo.png')
             }
         };
     }
 
     getIcon(name) {
         return this.images.icons[name];
+    }
+
+    getImage(name) {
+        return this.images.images[name];
     }
 }
