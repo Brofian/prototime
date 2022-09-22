@@ -1,20 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import {Button, LogBox, Pressable, Text, TextInput, View} from 'react-native';
-import Screen from "../abstract/Screen";
-import {ScreenStyles} from "../styles/ScreenStyles";
-import DateTimeWidget from "../components/DateTimeWidget";
-import {WidgetStyles} from "../styles/WidgetStyles";
-import {TextStyles} from "../styles/TextStyles";
-import {TableLayoutStyles} from "../styles/TableLayoutStyles";
+import {LogBox, View} from 'react-native';
 import ProtocolService from "../services/ProtocolService";
 import {Colors} from "../styles/Variables";
-import NumberSelect from "../components/NumberSelect";
-import ConfigService from "../services/ConfigService";
-import {defaultConfig} from "../services/ConfigService";
 import AddTimeScreen from "./AddTimeScreen";
 import ActionButton from "../components/ActionButton";
 import AlertHelper from "../services/AlertHelper";
 import ImageService from "../services/ImageService";
+import {TextStyles} from "../styles/TextStyles";
 
 
 LogBox.ignoreLogs([
@@ -25,17 +16,7 @@ export default class EditTimeScreen extends AddTimeScreen {
 
     constructor(props) {
         super(props);
-        let item = this.route.params.item;
-
         this.title = 'Bearbeite den Eintrag';
-
-        this.setState({
-            start: item.start,
-            end: item.start+item.duration+(item.breakTime*1000*60),
-            break: item.breakTime,
-            comment: item.comment,
-            breakDefault: item.breakTime
-        });
     }
 
 
@@ -95,8 +76,9 @@ export default class EditTimeScreen extends AddTimeScreen {
                 {super.render()}
 
                 <ActionButton
-                    color={Colors.warning}
-                    background={Colors.red}
+                    color={Colors.red}
+                    background={Colors.warning}
+                    iconTint={Colors.text}
                     src={ImageService.getInstance().getIcon('bin')}
                     onPress={
                         () => AlertHelper.confirm(

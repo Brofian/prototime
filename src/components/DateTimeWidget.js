@@ -1,8 +1,8 @@
 import {Component} from "react";
 import {DateTimePickerAndroid} from "@react-native-community/datetimepicker";
-import {Button, Text, TouchableHighlight, TouchableOpacity, View} from "react-native";
+import {Text, TouchableOpacity, View} from "react-native";
 import {WidgetStyles} from "../styles/WidgetStyles";
-import {Colors} from "../styles/Variables";
+
 
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 const weekdays = ['So','Mo','Di','Mi','Do','Fr','Sa'];
@@ -114,7 +114,20 @@ export default class DateTimeWidget extends Component {
      * @param datetime
      */
     static toFullDateTime(datetime) {
-       return `${DateTimeWidget.toCalendarDate(datetime)} ${DateTimeWidget.toTime(datetime)} Uhr`;
+       return `${DateTimeWidget.toCalendarDate(datetime)} ${DateTimeWidget.toTime(datetime)}`;
+    }
+
+    /**
+     * @param {Date} datetime1
+     * @param {Date} datetime2
+     * @returns {boolean}
+     */
+    static isSameDate(datetime1, datetime2) {
+        return (
+            datetime1.getFullYear() === datetime2.getFullYear() &&
+            datetime1.getMonth() === datetime2.getMonth() &&
+            datetime1.getDate() === datetime2.getDate()
+        );
     }
 
     render() {

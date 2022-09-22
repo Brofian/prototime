@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import {Button, LogBox, Pressable, Text, TextInput, View} from 'react-native';
+import {LogBox, Pressable, Text, TextInput, View} from 'react-native';
 import Screen from "../abstract/Screen";
 import {ScreenStyles} from "../styles/ScreenStyles";
 import DateTimeWidget from "../components/DateTimeWidget";
@@ -34,6 +34,17 @@ export default class AddTimeScreen extends Screen {
         this.state.break = ConfigService.getInstance().get('defaultBreakTime', defaultConfig.breakTime);;
         this.state.breakDefault = ConfigService.getInstance().get('defaultBreakTime', defaultConfig.breakTime);;
         this.title = 'Füge einen neuen Eintrag hinzu';
+
+        let item = this.route.params.item;
+        if(item) {
+            this.setState({
+                start: item.start,
+                end: item.start+item.duration+(item.breakTime*1000*60),
+                break: item.breakTime,
+                comment: item.comment,
+                breakDefault: item.breakTime
+            });
+        }
     }
 
 

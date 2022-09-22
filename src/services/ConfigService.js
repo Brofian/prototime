@@ -12,7 +12,8 @@ export const defaultConfig = {
     breakTime: 0,
     startOfMeasurement: (new Date('2022/09/01')).getTime(),
     backlogThreshold: 40,
-    ignoredHoursInUnitBeforeStart: 0
+    ignoredHoursInUnitBeforeStart: 0,
+    trackingState: null
 };
 
 
@@ -65,6 +66,12 @@ export default class ConfigService {
         if(this.configuration.hasOwnProperty(key)) {
             return this.configuration[key];
         }
+
+        if(fallback === null && defaultConfig[key] !== null) {
+            // if no fallback is provided, but a default exists, return the default
+            return defaultConfig[key];
+        }
+        // otherwise return the fallback
         return fallback;
     }
 

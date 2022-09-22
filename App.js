@@ -7,12 +7,13 @@ import AddTimeScreen from "./src/screens/AddTimeScreen";
 import ConfigScreen from "./src/screens/ConfigScreen";
 import {Colors} from "./src/styles/Variables";
 import ConfigService, {configEvents} from "./src/services/ConfigService";
-import ProtocolService, {InitEventName, protocolEvents} from "./src/services/ProtocolService";
+import ProtocolService, {protocolEvents} from "./src/services/ProtocolService";
 import EventSystem from "./src/services/EventSystem";
 import {TimelessStateComponent} from "./src/abstract/Component";
 import LoadingWidget from "./src/components/LoadingWidget";
 import ImageService from "./src/services/ImageService";
 import EditTimeScreen from "./src/screens/EditTimeScreen";
+import TrackingScreen from "./src/screens/TrackingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -121,6 +122,13 @@ export default class App extends TimelessStateComponent {
                         component={ConfigScreen}
                         options={{
                             title: "Einstellungen"
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Tracking"
+                        component={TrackingScreen}
+                        options={{
+                            title: "Tracking"
                         }}
                     />
                 </Stack.Navigator>

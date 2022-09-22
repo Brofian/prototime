@@ -129,9 +129,9 @@ export default class WorkloadWidget extends TimelessStateComponent {
                             duration={500+Math.random()*500}
                             progressValueColor={isBacklogOutOfControl ? Colors.warning : Colors.primaryLight}
                             activeStrokeColor={isBacklogOutOfControl  ? Colors.warning : Colors.primaryLight}
+                            activeStrokeSecondaryColor={isBacklogOutOfControl ? Colors.warning : Colors.primary}
                             progressFormatter={(value) => {
                                 'worklet';
-
                                 return (value > 0 ? '+':'')+TimeCalculations.formatMinutes(value);
                             }}
                         />
@@ -148,24 +148,13 @@ export default class WorkloadWidget extends TimelessStateComponent {
                             duration={500+Math.random()*500}
                             progressValueColor={Colors.primaryLight}
                             activeStrokeColor={Colors.primaryLight}
+                            activeStrokeSecondaryColor={Colors.primary}
                             title={'/ '+TimeCalculations.formatMinutes(unitWorkload)}
                             titleColor={Colors.text}
                             titleStyle={{fontSize: 15}}
                             progressFormatter={TimeCalculations.formatMinutes}
                         />
                     </View>
-                </View>
-
-                <View style={{flex: 1, alignSelf: 'stretch', alignItems: 'center' }}>
-                    <Pressable
-                        onPress={() => {
-                            this.onProtocolChanged();
-                            this.onConfigChanged();
-                        }}
-                        style={ButtonStyles.primary}
-                    >
-                        <Text style={TextStyles.dark}>Aktualisieren</Text>
-                    </Pressable>
                 </View>
             </View>
         );

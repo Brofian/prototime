@@ -74,10 +74,11 @@ export default class TimeListingScreen extends Screen {
                         {DateTimeWidget.toTime(duration, true)}h
                     </Text>
                     <Text style={TextStyles.default}>
-                        {DateTimeWidget.toFullDateTime(start)} bis {DateTimeWidget.toFullDateTime(end)}
+                        {DateTimeWidget.toFullDateTime(start)} Uhr bis &nbsp;
+                        {DateTimeWidget.isSameDate(start, end) ? DateTimeWidget.toTime(end) : DateTimeWidget.toFullDateTime(end)} Uhr
                     </Text>
-                    {!breakTime     ? '' : <Text style={TextStyles.default}>Zzgl. {breakTime} Minuten Pause</Text>}
-                    {!comment       ? '' : <Text style={TextStyles.default}>{comment}</Text>}
+                    {!breakTime     ? '' : <Text style={TextStyles.camouflage}>Zzgl. {breakTime} Minuten Pause</Text>}
+                    {!comment       ? '' : <Text style={TextStyles.camouflage}>{comment}</Text>}
                     <View style={TextStyles.spacer.l} />
                 </View>
             </TouchableWithoutFeedback>

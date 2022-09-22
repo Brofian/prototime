@@ -43,5 +43,12 @@ export const ButtonStyles = StyleSheet.create({
         backgroundColor: Colors.gray300,
         borderRadius: 30,
         alignItems: 'center'
+    },
+    danger: {
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        backgroundColor: Colors.red,
+        borderRadius: 30,
+        alignItems: 'center'
     }
 });

@@ -2,8 +2,8 @@ import {Component} from "react";
 import {Image, TouchableHighlight, View} from "react-native";
 import {ButtonStyles} from "../styles/ButtonStyles";
 import PropTypes from "prop-types";
-import {Column} from "./layout/Layout";
 import {Colors} from "../styles/Variables";
+import {TextStyles} from "../styles/TextStyles";
 
 export default class  ActionButton extends Component {
 
@@ -30,7 +30,9 @@ export default class  ActionButton extends Component {
                     }]}>
                         <Image
                             source={this.props.src}
-                            style={ButtonStyles.action.icon}
+                            style={[ButtonStyles.action.icon, {
+                                tintColor: this.props.iconTint
+                            }]}
                             resizeMode='contain'
                         />
                     </View>
@@ -48,6 +50,7 @@ ActionButton.propTypes = {
     onPress: PropTypes.func.isRequired,
     color: PropTypes.string,
     background: PropTypes.string,
+    iconTint: PropTypes.string
 };
 ActionButton.defaultProps = {
     size: 20,
@@ -55,4 +58,5 @@ ActionButton.defaultProps = {
     onPress: null,
     color: Colors.primary,
     background: Colors.primaryDark,
+    iconTint: Colors.background
 };
