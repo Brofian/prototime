@@ -2,7 +2,8 @@ import {Component} from "react";
 import {Pressable, Text, View} from "react-native";
 import {ReactNativeModal} from "react-native-modal";
 import {Colors} from "../styles/Variables";
-import {TextStyles} from "../styles/TextStyles";
+import PropTypes from "prop-types";
+import Icon from "./Icon";
 
 export default class ModalComponent extends Component {
 
@@ -30,5 +31,13 @@ export default class ModalComponent extends Component {
             </View>
         );
     }
-
 }
+
+ModalComponent.propTypes = {
+    isVisible: PropTypes.bool.isRequired,
+    onCloseBtnPressed: PropTypes.func,
+};
+ModalComponent.defaultProps = {
+    isVisible: false,
+    onCloseBtnPressed: () => {}
+};

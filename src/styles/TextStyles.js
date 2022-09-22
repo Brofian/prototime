@@ -43,6 +43,9 @@ export const TextStyles = StyleSheet.create({
     bold: {
         fontWeight: "600"
     },
+    underlined: {
+        textDecorationLine: "underline"
+    },
     centered: {
       textAlign: 'center'
     },

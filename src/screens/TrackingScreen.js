@@ -51,7 +51,7 @@ export default class TrackingScreen extends Screen {
                 startedAt: now.getTime(),
                 pausedAt: null, // if and when the user paused the tracking
                 totalPauseTime: 0 // paused time from previous tracking
-            });
+            }, true);
     }
 
     resetTracking() {
@@ -65,7 +65,7 @@ export default class TrackingScreen extends Screen {
             animationTimer: 0,
             trackedTime: 0
         });
-        this.configService.set('trackingState', null);
+        this.configService.set('trackingState', null, true);
     }
 
     onTrackingStop() {
@@ -104,7 +104,7 @@ export default class TrackingScreen extends Screen {
             trackingState.pausedAt = now.getTime();
         }
 
-        this.configService.set('trackingState', trackingState);
+        this.configService.set('trackingState', trackingState, true);
     }
 
     getCurrentTrackingDuration() {

@@ -1,6 +1,8 @@
 import Storage from "../abstract/Storage";
 import EventSystem from "./EventSystem";
 
+export const AppVersion = "0.7.0";
+
 export const configEvents = {
     configInitialized: 'configInitialized',
     configChanged: 'configChanged'
@@ -13,7 +15,8 @@ export const defaultConfig = {
     startOfMeasurement: (new Date('2022/09/01')).getTime(),
     backlogThreshold: 40,
     ignoredHoursInUnitBeforeStart: 0,
-    trackingState: null
+    trackingState: null,
+    installedAppVersion: '0.0.0'
 };
 
 
@@ -76,9 +79,12 @@ export default class ConfigService {
     }
 
 
-    set(key, value) {
+    set(key, value, doInstantSave = false) {
         this.configuration[key] = value;
         this._onStorageChange();
+        if(doInstantSave) {
+            this.save();
+        }
     }
 
     save(callback = null) {

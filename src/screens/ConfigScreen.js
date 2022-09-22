@@ -246,6 +246,17 @@ export default class ConfigScreen extends Screen {
                 </Layout>
 
                 <View style={{ display: (this.route.params.debugMode) ? 'flex' : 'none' }}>
+
+                    <Pressable
+                        onPress={() => this.navigation.navigate('Message')}
+                        style={ButtonStyles.secondary}
+                    >
+                        <Text style={TextStyles.default}>Messageboard öffnen</Text>
+                    </Pressable>
+
+                    <View style={TextStyles.spacer.m}/>
+
+
                     <Pressable
                         onPress={() => {
                             AlertHelper.confirm(
