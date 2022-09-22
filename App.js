@@ -14,14 +14,9 @@ import LoadingWidget from "./src/components/LoadingWidget";
 import ImageService from "./src/services/ImageService";
 import EditTimeScreen from "./src/screens/EditTimeScreen";
 import TrackingScreen from "./src/screens/TrackingScreen";
+import MessageScreen from "./src/screens/MessageScreen";
 
 const Stack = createNativeStackNavigator();
-
-const forFade = ({ current }) => ({
-    cardStyle: {
-        opacity: current.progress,
-    },
-});
 
 export default class App extends TimelessStateComponent {
 
@@ -129,6 +124,13 @@ export default class App extends TimelessStateComponent {
                         component={TrackingScreen}
                         options={{
                             title: "Tracking"
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Message"
+                        component={MessageScreen}
+                        options={{
+                            title: "Messageboard"
                         }}
                     />
                 </Stack.Navigator>

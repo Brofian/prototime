@@ -21,7 +21,9 @@ export default class ImageService {
                 bin: require('../assets/icons/bin.png'),
             },
             images: {
-                logo: require('../assets/PrototimeLogo.png')
+                logo: require('../assets/PrototimeLogo.png'),
+                logoFull: require('../assets/PrototimeLogoFilled.png'),
+                logoBackground: require('../assets/PrototimeLogoBackground.png')
             }
         };
     }

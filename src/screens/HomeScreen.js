@@ -7,7 +7,8 @@ import WorkloadWidget, {unitNames} from "../components/WorkloadWidget";
 import {ButtonStyles} from "../styles/ButtonStyles";
 import {TextStyles} from "../styles/TextStyles";
 import EventSystem from "../services/EventSystem";
-import ConfigService, {configEvents} from "../services/ConfigService";
+import ConfigService, {AppVersion, configEvents} from "../services/ConfigService";
+import MessageScreen from "./MessageScreen";
 
 export default class HomeScreen extends Screen {
 
@@ -21,6 +22,10 @@ export default class HomeScreen extends Screen {
             isDebugMode: false,
             debugCounter: 4 // fifth tap will activate debug mode
         });
+
+        if(MessageScreen.shouldShowMessageScreen(this.configService)) {
+            this.navigation.navigate('Message');
+        }
     }
 
     onConfigChange() {
@@ -32,22 +37,6 @@ export default class HomeScreen extends Screen {
             unitsSinceBegin: WorkloadWidget.getUnitsSinceBegin(timeUnit),
             trackingState: trackingState
         });
-    }
-
-    onTrackingButtonPressed() {
-        if(this.state.trackingState) {
-            // there is already a tracking ongoing
-            this.configService.set('trackingState', null);
-        }
-        else {
-            // there is currently no tracking -> create a new one
-            let now = new Date();
-            this.configService.set('trackingState', {
-                startedAt: now.getTime(),
-                pausedAt: null, // if and when the user paused the tracking
-                totalPauseTime: 0 // paused time from previous tracking
-            });
-        }
     }
 
     render() {
@@ -91,9 +80,6 @@ export default class HomeScreen extends Screen {
                     </Pressable>
                 </View>
 
-
-
-
                 <View style={{flex: 2, justifyContent: 'flex-end'}}>
                     <Text style={TextStyles.default}>{this.state.unitsSinceBegin} {this.state.unitsSinceBegin===1?  unitNames[this.state.unit].s:unitNames[this.state.unit].p  } seit Beginn</Text>
                     <View style={{flexDirection: 'row'}}>
@@ -110,7 +96,7 @@ export default class HomeScreen extends Screen {
                                     });
                                 }
                             }}
-                        ><Text style={TextStyles.camouflage}>Prototime v0.6.0 </Text></Pressable>
+                        ><Text style={TextStyles.camouflage}>Prototime v{AppVersion} </Text></Pressable>
                         <Text style={TextStyles.camouflage}>&copy; 2022 Fabian Holzwarth</Text>
                     </View>
                 </View>

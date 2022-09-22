@@ -25,6 +25,7 @@ export default class TimeCalculations {
             m = '0'+m;
         }
 
+
         return `${minutes<0?'-':''}${h}:${m}`;
     }
 
@@ -94,6 +95,19 @@ export default class TimeCalculations {
         return TimeCalculations.getDaysInYearUntil(
             new Date(date.getFullYear(), 12, 30)
         );
+    }
+
+    static isNewerVersionAs(version1, version2) {
+        return this.versionToInt(version2) > this.versionToInt(version1);
+    }
+
+    static versionToInt(version) {
+        let parts = version.split('.');
+        let str = '1';
+        for(let part of parts) {
+            str += part.padStart(5, '0');
+        }
+        return parseInt(str);
     }
 
 }
