@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "595065026149",
+    "project_id": "prototime-deafb",
+    "storage_bucket": "prototime-deafb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595065026149:android:902caa999ac0b589af788c",
+        "android_client_info": {
+          "package_name": "de.fabianholzwarth.prototime"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "595065026149-cvpsouvqpj8gt9rpmfva9436uoa5n8ec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdrFZK1TJ7KCtdMa6CC1YYpVPtN6pX0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "595065026149-cvpsouvqpj8gt9rpmfva9436uoa5n8ec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

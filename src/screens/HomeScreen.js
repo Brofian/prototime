@@ -9,6 +9,7 @@ import {TextStyles} from "../styles/TextStyles";
 import EventSystem from "../services/EventSystem";
 import ConfigService, {AppVersion, configEvents} from "../services/ConfigService";
 import MessageScreen from "./MessageScreen";
+import Condition from "../components/Condition";
 
 export default class HomeScreen extends Screen {
 
@@ -63,7 +64,7 @@ export default class HomeScreen extends Screen {
                     <View style={TextStyles.spacer.xs} />
 
                     <Pressable
-                        onPress={() => this.navigation.navigate('Config', {debugMode: this.state.debugMode})}
+                        onPress={() => this.navigation.navigate('Config')}
                         style={ButtonStyles.secondary}
                     >
                         <Text style={[TextStyles.default, {width: 150, textAlign: 'center'}]}>Konfiguration</Text>
@@ -78,6 +79,19 @@ export default class HomeScreen extends Screen {
                     >
                         <Text style={[TextStyles.default, {width: 150, textAlign: 'center'}]}>Protokoll</Text>
                     </Pressable>
+
+                    <View style={TextStyles.spacer.m} />
+                    <View style={TextStyles.spacer.xs} />
+
+                    <Condition on={this.state.debugMode}>
+                        <Pressable
+                            onPress={() => this.navigation.navigate('Debug')}
+                            style={ButtonStyles.secondary}
+                        >
+                            <Text style={[TextStyles.default, {width: 150, textAlign: 'center'}]}>Debug</Text>
+                        </Pressable>
+                    </Condition>
+
                 </View>
 
                 <View style={{flex: 2, justifyContent: 'flex-end'}}>

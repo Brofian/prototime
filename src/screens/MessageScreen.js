@@ -91,6 +91,13 @@ export default class MessageScreen extends Screen {
 
                     <Text style={[TextStyles.header.minor, TextStyles.default]}>Was ist neu?</Text>
 
+                    <Condition on={this.showAll || this.oldInstalledVersionInt < TimeCalculations.versionToInt('0.8.0')}>
+                        <View style={TextStyles.spacer.m} />
+                        <Text style={[TextStyles.underlined, TextStyles.default]}>v0.8.0</Text>
+                        <Text style={TextStyles.default}>- Push Notification während Tracking hinzugefügt</Text>
+                        <Text style={TextStyles.default}>- Debug Optionen in einen eigenen Screen verschoben</Text>
+                    </Condition>
+
                     <Condition on={this.showAll || this.oldInstalledVersionInt < TimeCalculations.versionToInt('0.7.1')}>
                         <View style={TextStyles.spacer.m} />
                         <Text style={[TextStyles.underlined, TextStyles.default]}>v0.7.1</Text>

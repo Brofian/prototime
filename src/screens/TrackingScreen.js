@@ -10,6 +10,7 @@ import ConfigService, {configEvents} from "../services/ConfigService";
 import CircularProgress from "react-native-circular-progress-indicator";
 import TimeCalculations from "../services/TimeCalculations";
 import AlertHelper from "../services/AlertHelper";
+import NotificationService from "../services/NotificationService";
 
 const animationSpeed = 100;
 
@@ -18,6 +19,7 @@ export default class TrackingScreen extends Screen {
     constructor(props) {
         super(props);
 
+        this.notificationService = NotificationService.getInstance();
         this.configService = ConfigService.getInstance();
         EventSystem.subscribe(configEvents.configChanged, this.onConfigChange, this);
         this.onConfigChange();
@@ -45,13 +47,23 @@ export default class TrackingScreen extends Screen {
         });
     }
 
-    onTrackingStart() {
-            let now = new Date();
-            this.configService.set('trackingState', {
-                startedAt: now.getTime(),
-                pausedAt: null, // if and when the user paused the tracking
-                totalPauseTime: 0 // paused time from previous tracking
-            }, true);
+    async onTrackingStart() {
+        let now = new Date();
+        await this.notificationService.schedulePushNotification(
+            'Prototime - Tracking',
+            'Deine Arbeitszeit wird aktuell gemessen. \nBeende die App, um diese Nachricht zu verstecken',
+            {openPage: 'Tracking'},
+            true,
+            false,
+            (id) => this.lastPersistentNotificationId = id
+        );
+
+        this.configService.set('trackingState', {
+            startedAt: now.getTime(),
+            pausedAt: null, // if and when the user paused the tracking
+            totalPauseTime: 0, // paused time from previous tracking,
+            notificationId: this.lastPersistentNotificationId
+        }, true);
     }
 
     resetTracking() {
@@ -59,6 +71,10 @@ export default class TrackingScreen extends Screen {
 
         if(trackingState.pausedAt) {
             this.onTrackingPauseToggle();
+        }
+
+        if(trackingState.notificationId) {
+            this.notificationService.removePushNotifications(trackingState.notificationId);
         }
 
         this.setState({

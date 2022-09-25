@@ -15,6 +15,7 @@ import ImageService from "./src/services/ImageService";
 import EditTimeScreen from "./src/screens/EditTimeScreen";
 import TrackingScreen from "./src/screens/TrackingScreen";
 import MessageScreen from "./src/screens/MessageScreen";
+import DebugScreen from "./src/screens/DebugScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +25,7 @@ export default class App extends TimelessStateComponent {
         super(props);
         this.setState({
             isConfigInitialized: false,
-            isProtocolInitialized: false,
+            isProtocolInitialized: false
         });
 
         EventSystem.subscribe(configEvents.configInitialized, this.onConfigInitialized, this);
@@ -137,6 +138,13 @@ export default class App extends TimelessStateComponent {
                         component={MessageScreen}
                         options={{
                             title: "Messageboard"
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Debug"
+                        component={DebugScreen}
+                        options={{
+                            title: "Debug"
                         }}
                     />
                 </Stack.Navigator>

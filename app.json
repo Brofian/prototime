@@ -2,17 +2,27 @@
   "expo": {
     "name": "Prototime",
     "slug": "prototime",
+    "version": "0.8.0",
     "description": "A tool for documenting time and keeping an eye on your workload",
     "orientation": "portrait",
+    "sdkVersion": "46.0.0",
     "android": {
       "package": "de.fabianholzwarth.prototime",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/PrototimeLogo.png",
         "backgroundImage": "./src/assets/PrototimeLogoBackground.png"
       }
     },
     "userInterfaceStyle": "automatic",
-    "sdkVersion": "46.0.0",
-    "version": "0.7.1"
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/PrototimeLogo.png",
+          "color": "#ffffff"
+        }
+      ]
+    ]
   }
 }

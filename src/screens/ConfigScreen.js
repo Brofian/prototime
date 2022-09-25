@@ -5,10 +5,6 @@ import {ScreenStyles} from "../styles/ScreenStyles";
 import DateTimeWidget from "../components/DateTimeWidget";
 import {TextStyles, TS} from "../styles/TextStyles";
 import NumberSelect from "../components/NumberSelect";
-import AlertHelper from "../services/AlertHelper";
-import DebugHelper from "../services/DebugHelper";
-import ProtocolService from "../services/ProtocolService";
-import {ButtonStyles} from "../styles/ButtonStyles";
 import EventSystem from "../services/EventSystem";
 import ConfigService, {configEvents, defaultConfig} from "../services/ConfigService";
 import {Colors} from "../styles/Variables";
@@ -244,73 +240,6 @@ export default class ConfigScreen extends Screen {
                     </Row>
 
                 </Layout>
-
-                <View style={{ display: (this.route.params.debugMode) ? 'flex' : 'none' }}>
-
-                    <Pressable
-                        onPress={() => this.navigation.navigate('Message')}
-                        style={ButtonStyles.secondary}
-                    >
-                        <Text style={TextStyles.default}>Messageboard öffnen</Text>
-                    </Pressable>
-
-                    <View style={TextStyles.spacer.m}/>
-
-
-                    <Pressable
-                        onPress={() => {
-                            AlertHelper.confirm(
-                                'Wirklich löschen?',
-                                'Wenn du das tust, gehen alle deine Daten unwiederruflich verloren. Bist du dir sicher?',
-                                'Bestätigen',
-                                () => {
-                                    AlertHelper.confirm(
-                                        'Bist du sicher?',
-                                        'Das ist meine letzte Warnung. Es ist alles weg!',
-                                        'Ich bin sicher!',
-                                        () => ProtocolService.getInstance()._clear()
-                                    );
-                                }
-                            );
-                        }}
-                        style={ButtonStyles.secondary}
-                    >
-                        <Text style={TextStyles.default}>Alle Daten löschen</Text>
-                    </Pressable>
-
-                    <View style={TextStyles.spacer.m}/>
-
-                    <Pressable
-                        onPress={() => {
-                            AlertHelper.confirm(
-                                'Wirklich zurücksetzen?',
-                                'Wenn du das tust, gehen alle deine Einstellungen unwiederruflich verloren. Bist du dir sicher?',
-                                'Bestätigen',
-                                () => {
-                                    AlertHelper.confirm(
-                                        'Bist du sicher?',
-                                        'Das ist meine letzte Warnung. Es ist alles auf Anfang!',
-                                        'Ich bin sicher!',
-                                        () => ConfigService.getInstance()._clear(this.updateConfig.bind(this))
-                                    );
-                                }
-                            );
-                        }}
-                        style={ButtonStyles.secondary}
-                    >
-                        <Text style={TextStyles.default}>Einstellungen zurücksetzen</Text>
-                    </Pressable>
-
-                    <View style={TextStyles.spacer.m}/>
-
-                    <Pressable
-                        onPress={DebugHelper.createExampleEntry}
-                        style={ButtonStyles.secondary}
-                    >
-                        <Text style={TextStyles.default}>Debug Eintrag erstellen</Text>
-                    </Pressable>
-
-                </View>
 
 
                 <ModalComponent

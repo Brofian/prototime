@@ -1,7 +1,7 @@
 {
   "name": "prototime",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "./node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -31,7 +31,9 @@
     "react-native-screens": "~3.15.0",
     "react-native-select-dropdown": "^2.0.4",
     "react-native-svg": "12.3.0",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "expo-notifications": "~0.16.1",
+    "expo-device": "~4.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
