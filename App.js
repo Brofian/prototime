@@ -67,8 +67,14 @@ export default class App extends TimelessStateComponent {
     }
 
     renderLoadingScreen() {
+        let hint = '';
+        if(this.state.isProtocolInitialized)    hint += 'Protocol loaded \n';
+        if(this.state.isConfigInitialized)      hint += 'Configuration loaded \n';
+
         return (
-            <LoadingWidget />
+            <LoadingWidget
+                hint={hint}
+            />
         );
     }
 

@@ -14,6 +14,7 @@ export default class Storage {
                 callback(true, key, value);
             }
         } catch (error) {
+            console.error(error);
             if(callback) {
                 callback(false, error);
             }
@@ -31,6 +32,18 @@ export default class Storage {
         } catch (error) {
             console.error(error);
             callback(false, error);
+        }
+    }
+
+    static async remove(key, callback = null) {
+        try {
+            if(isDebug) console.log('removing key ' + key);
+            await AsyncStorageNative.removeItem(key);
+            if(isDebug) console.log('removed item by key ' + key);
+            if(callback) callback(true, key);
+        } catch (error) {
+            console.error(error);
+            if(callback)callback(false, error);
         }
     }
 

@@ -150,12 +150,25 @@ class ProtocolStorage {
     }
 
     _clear() {
+        for(let key in ProtocolStorage.storage) {
+            Storage.remove('item_'+key);
+        }
+
         ProtocolStorage.storage = [];
         this._save();
     }
 
     _load(success, key, item) {
-        if (success && item) {
+
+        if(success && key === 'length' && (!item || item === "0")) {
+            console.log('no protocol found');
+            // tried loading length, but there is no entry yet
+            ProtocolStorage.storage = {};
+            this.desiredLength = 0;
+            this.isInitialized = true;
+            this.initCallback();
+        }
+        else if (success && item) {
             if (key === 'length') {
                 ProtocolStorage.storage = {};
                 this.desiredLength = parseInt(item??"0");
@@ -203,8 +216,12 @@ class ProtocolStorage {
         }
     }
 
+    delete(id, callback = null) {
+        Storage.remove(id, callback);
+    }
+
     getLoadingProgress() {
-        return Math.max(1, this.length / this.desiredLength);
+        return Math.max(1, this.length / (this.desiredLength ?? 1));
     }
 
     isReady() {

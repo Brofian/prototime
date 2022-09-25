@@ -1,7 +1,7 @@
 import Storage from "../abstract/Storage";
 import EventSystem from "./EventSystem";
 
-export const AppVersion = "0.7.0";
+export const AppVersion = "0.7.1";
 
 export const configEvents = {
     configInitialized: 'configInitialized',
